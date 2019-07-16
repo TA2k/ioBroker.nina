@@ -34,7 +34,10 @@ class Nina extends utils.Adapter {
 
 		// Reset the connection indicator during startup
 		this.setState("info.connection", false, true);
-		this.agsArray = this.config.agsArray.replace(/ /g, '').split(",");
+		this.agsArray = []
+		if (this.config.agsArray) {
+			this.agsArray = this.config.agsArray.replace(/ /g, '').split(",");
+		}
 		request.get({
 			url: "https://warnung.bund.de/assets/json/suche_channel.json",
 			followAllRedirects: true
