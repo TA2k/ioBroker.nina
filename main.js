@@ -66,7 +66,7 @@ class Nina extends utils.Adapter {
 		this.interval = setInterval(() => {
 			this.parseJSON();
 		}, this.config.interval * 1000 * 60);
-
+		this.parseJSON();
 		// in this template all states changes inside the adapters namespace are subscribed
 		//this.subscribeStates("*");
 
@@ -88,30 +88,37 @@ class Nina extends utils.Adapter {
 				if (err) {
 					this.log.error(JSON.stringify(err));
 					reject();
+					this.setState("info.connection", false, true);
 				}
 				try {
 					this.log.debug(body);
 					const gefahren = JSON.parse(body);
+					this.setState("info.connection", true, true);
 					const currentGefahren = {};
 					gefahren.forEach(element => {
 						element.info.forEach(infoElement => {
 							infoElement.area.forEach(areaElement => {
-								const trimmedAreaCode = areaElement.geocode.value.replace(new RegExp("[0]+$"), "");
-								if (this.agsArray.indexOf(trimmedAreaCode) !== -1) {
-									if (currentGefahren[trimmedAreaCode]) {
-										currentGefahren[trimmedAreaCode].push(element);
-									} else {
-										currentGefahren[trimmedAreaCode] = [element];
+								areaElement.geocode.forEach(geoElement => {
+									const trimmedAreaCode = geoElement.value.replace(new RegExp("[0]+$"), "");
+									if (this.agsArray.indexOf(trimmedAreaCode) !== -1) {
+										if (currentGefahren[trimmedAreaCode]) {
+											currentGefahren[trimmedAreaCode].push(element);
+										} else {
+											currentGefahren[trimmedAreaCode] = [element];
+										}
 									}
-								}
+								});
 							});
 
 						});
 					});
-					this.setGefahren(currentGefahren);
+					this.setGefahren(currentGefahren).then(() => {
+						resolve();
+					})
 
 				} catch (error) {
 					this.log.error(JSON.stringify(error));
+					this.setState("info.connection", false, true);
 					reject();
 
 				}
@@ -119,29 +126,46 @@ class Nina extends utils.Adapter {
 		});
 	}
 	setGefahren(currentGefahren) {
-		const adapter = this;
-		Object.keys(currentGefahren).forEach(areaCode => {
-			currentGefahren[areaCode].forEach((element, index) => {
-				let stringIndex = index + "";
-				while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
-				traverse(element).forEach(function (value) {
-
-					adapter.setObjectNotExists(areaCode + ".warnung" + stringIndex + "." + this.path.join("."), {
-						type: "state",
-						common: {
-							name: this.key,
-							role: "indicator",
-							type: "mixed",
-							write: false,
-							read: true
-						},
-						native: {}
+		return new Promise((resolve, reject) => {
+			const adapter = this;
+			Object.keys(currentGefahren).forEach(areaCode => {
+				currentGefahren[areaCode].forEach((element, index) => {
+					let stringIndex = index + 1 + "";
+					while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
+					traverse(element).forEach(function (value) {
+						if (this.path.length > 0 && this.isLeaf) {
+							let modPath = this.path;
+							this.path.forEach((pathElement, pathIndex) => {
+								if (!isNaN(parseInt(pathElement))) {
+									let stringPathIndex = parseInt(pathElement) + 1 + "";
+									while (stringPathIndex.length < 2) stringPathIndex = "0" + stringPathIndex;
+									const key = this.path[pathIndex - 1] + stringPathIndex;
+									const parentIndex = modPath.indexOf(pathElement) - 1;
+									//if (this.key === pathElement) {
+									modPath[parentIndex] = key;
+									//}
+									modPath.splice(parentIndex + 1, 1);
+								}
+							});
+							adapter.setObjectNotExists(areaCode + ".warnung" + stringIndex + "." + modPath.join("."), {
+								type: "state",
+								common: {
+									name: this.key,
+									role: "indicator",
+									type: "mixed",
+									write: false,
+									read: true
+								},
+								native: {}
+							});
+							adapter.setState(areaCode + ".warnung" + stringIndex + "." + modPath.join("."), value, true);
+						}
 					});
-					adapter.setState(areaCode + ".warnung" + stringIndex + "." + this.path.join("."), value, true);
 				});
+
+
 			});
-
-
+			resolve();
 		});
 	}
 	/**

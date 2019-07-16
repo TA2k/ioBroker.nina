@@ -1,28 +1,40 @@
 {
-  "name": "iobroker.nina",
-  "version": "0.0.1",
-  "description": "Notfall-Informations- und Nachrichten-App",
+  "_from": "https://github.com/TA2k/ioBroker.nina/tarball/master",
+  "_id": "iobroker.nina@0.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-w9zfGkNUPrai/F1Xn8nuJm1Zk1HgoWVQN5e5H/IKftGTL0uu/WwiOgFMKppHrRcBsu5l/Xo01oa7kvlCrK/32g==",
+  "_location": "/iobroker.nina",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "https://github.com/TA2k/ioBroker.nina/tarball/master",
+    "rawSpec": "https://github.com/TA2k/ioBroker.nina/tarball/master",
+    "saveSpec": "https://github.com/TA2k/ioBroker.nina/tarball/master",
+    "fetchSpec": "https://github.com/TA2k/ioBroker.nina/tarball/master"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://github.com/TA2k/ioBroker.nina/tarball/master",
+  "_shasum": "ee473c3adb15f7201f133ae4b3c99a43212d6239",
+  "_spec": "https://github.com/TA2k/ioBroker.nina/tarball/master",
+  "_where": "/Users/d057119/Development",
   "author": {
     "name": "tomboxi",
     "email": "tombox_2020@gmail.com"
   },
-  "homepage": "https://github.com/TA2k/ioBroker.nina",
-  "license": "MIT",
-  "keywords": [
-    "NINA",
-    "Gefahrenwarnung",
-    "Warnung",
-    "KATWARN"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/TA2k/ioBroker.nina"
+  "bugs": {
+    "url": "https://github.com/TA2k/ioBroker.nina/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
     "request": "^2.88.0",
     "traverse": "^0.6.6"
   },
+  "deprecated": false,
+  "description": "Notfall-Informations- und Nachrichten-App",
   "devDependencies": {
     "@iobroker/testing": "^1.2.5",
     "@types/chai": "^4.1.7",
@@ -43,17 +55,27 @@
     "sinon": "^7.3.2",
     "sinon-chai": "^3.3.0"
   },
+  "homepage": "https://github.com/TA2k/ioBroker.nina",
+  "keywords": [
+    "NINA",
+    "Gefahrenwarnung",
+    "Warnung",
+    "KATWARN"
+  ],
+  "license": "MIT",
   "main": "main.js",
+  "name": "iobroker.nina",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TA2k/ioBroker.nina.git"
+  },
   "scripts": {
+    "lint": "eslint",
+    "test": "npm run test:js && npm run test:package",
+    "test:integration": "mocha test/integration --exit",
     "test:js": "mocha --opts test/mocha.custom.opts",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
-    "test:integration": "mocha test/integration --exit",
-    "test": "npm run test:js && npm run test:package",
-    "lint": "eslint"
+    "test:unit": "mocha test/unit --exit"
   },
-  "bugs": {
-    "url": "https://github.com/TA2k/ioBroker.nina/issues"
-  },
-  "readmeFilename": "README.md"
+  "version": "0.0.1"
 }
