@@ -1,0 +1,99 @@
+{
+	"common": {
+		"name": "nina",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"zh-cn": "首次出版"
+			}
+		},
+		"title": "Notfall-Informations- und Nachrichten-App",
+		"titleLang": {
+			"en": "Notfall-Informations- und Nachrichten-App",
+			"de": "Notfall-Informations- und Nachrichten-App",
+			"ru": "Notfall-информация- и Nachrichten-приложение",
+			"pt": "Notfall-Informations- und Nachrichten-App",
+			"nl": "Notfall-Informations- und Nachrichten-App",
+			"fr": "Notfall-Informations- und Nachrichten-App",
+			"it": "Notfall-Informations- und Nachrichten-App",
+			"es": "Notfall-Informations- und Nachrichten-App",
+			"pl": "Notfall-Informations- und Nachrichten-App",
+			"zh-cn": "Notfall-Informations- und Nachrichten-App"
+		},
+		"desc": {
+			"en": "Notfall-Informations- und Nachrichten-App",
+			"de": "Notfall-Informations- und Nachrichten-App",
+			"ru": "Notfall-информация- и Nachrichten-приложение",
+			"pt": "Notfall-Informations- und Nachrichten-App",
+			"nl": "Notfall-Informations- und Nachrichten-App",
+			"fr": "Notfall-Informations- und Nachrichten-App",
+			"it": "Notfall-Informations- und Nachrichten-App",
+			"es": "Notfall-Informations- und Nachrichten-App",
+			"pl": "Notfall-Informations- und Nachrichten-App",
+			"zh-cn": "Notfall-Informations- und Nachrichten-App"
+		},
+		"authors": [
+			"tomboxi <tombox_2020@gmail.com>"
+		],
+		"keywords": [
+			"NINA",
+			"Gefahrenwarnung",
+			"Warnung",
+			"KATWARN"
+		],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "nina.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.nina/master/admin/nina.png",
+		"readme": "https://github.com/TA2k/ioBroker.nina/blob/master/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "misc-data",
+		"compact": true,
+		"materialize": true,
+		"dependencies": [
+			{
+				"js-controller": ">=1.4.2"
+			}
+		]
+	},
+	"native": {
+		"interval": 5,
+		"rsArray": ""
+	},
+	"objects": [],
+	"instanceObjects": [
+		{
+			"_id": "info",
+			"type": "channel",
+			"common": {
+				"name": "Information"
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.connection",
+			"type": "state",
+			"common": {
+				"role": "indicator.connected",
+				"name": "Device or service connected",
+				"type": "boolean",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		}
+	]
+}
