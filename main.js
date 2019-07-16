@@ -67,7 +67,9 @@ class Nina extends utils.Adapter {
 			});
 		});
 		this.interval = setInterval(() => {
+
 			this.parseJSON();
+
 		}, this.config.interval * 1000 * 60);
 		this.parseJSON();
 		// in this template all states changes inside the adapters namespace are subscribed
@@ -84,53 +86,72 @@ class Nina extends utils.Adapter {
 
 	parseJSON() {
 		return new Promise((resolve, reject) => {
-			request.get({
-				url: "https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json",
-				followAllRedirects: true
-			}, (err, resp, body) => {
-				if (err) {
-					this.log.error(JSON.stringify(err));
-					reject();
-					this.setState("info.connection", false, true);
-				}
-				try {
-					this.log.debug(body);
-					const gefahren = JSON.parse(body);
-					this.setState("info.connection", true, true);
-					const currentGefahren = {};
-					gefahren.forEach(element => {
-						element.info.forEach(infoElement => {
-							infoElement.area.forEach(areaElement => {
-								areaElement.geocode.forEach(geoElement => {
-									const trimmedAreaCode = geoElement.value.replace(new RegExp("[0]+$"), "");
-									if (this.agsArray.indexOf(trimmedAreaCode) !== -1) {
-										if (currentGefahren[trimmedAreaCode]) {
-											currentGefahren[trimmedAreaCode].push(element);
-										} else {
-											currentGefahren[trimmedAreaCode] = [element];
-										}
-									}
+			const pre = this.name + "." + this.instance;
+			this.getStates(pre + ".*", (err, states) => {
+				const allIds = Object.keys(states);
+
+				allIds.forEach((keyName) => {
+					if (keyName.indexOf("warnung") !== -1) {
+						this.delObject(
+							keyName
+							.split(".")
+							.slice(2)
+							.join(".")
+						);
+					}
+				});
+
+				setTimeout(() => {
+					request.get({
+						url: "https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json",
+						followAllRedirects: true
+					}, (err, resp, body) => {
+						if (err) {
+							this.log.error(JSON.stringify(err));
+							reject();
+							this.setState("info.connection", false, true);
+						}
+						try {
+							this.log.debug(body);
+							const gefahren = JSON.parse(body);
+							this.setState("info.connection", true, true);
+							const currentGefahren = {};
+							gefahren.forEach(element => {
+								element.info.forEach(infoElement => {
+									infoElement.area.forEach(areaElement => {
+										areaElement.geocode.forEach(geoElement => {
+											const trimmedAreaCode = geoElement.value.replace(new RegExp("[0]+$"), "");
+											if (this.agsArray.indexOf(trimmedAreaCode) !== -1) {
+												if (currentGefahren[trimmedAreaCode]) {
+													currentGefahren[trimmedAreaCode].push(element);
+												} else {
+													currentGefahren[trimmedAreaCode] = [element];
+												}
+											}
+										});
+									});
+
 								});
 							});
+							this.setGefahren(currentGefahren).then(() => {
+								resolve();
+							})
 
-						});
+						} catch (error) {
+							this.log.error(JSON.stringify(error));
+							this.setState("info.connection", false, true);
+							reject();
+
+						}
 					});
-					this.setGefahren(currentGefahren).then(() => {
-						resolve();
-					})
-
-				} catch (error) {
-					this.log.error(JSON.stringify(error));
-					this.setState("info.connection", false, true);
-					reject();
-
-				}
+				}, 500);
 			});
 		});
 	}
 	setGefahren(currentGefahren) {
 		return new Promise((resolve, reject) => {
 			const adapter = this;
+
 			Object.keys(currentGefahren).forEach(areaCode => {
 				currentGefahren[areaCode].forEach((element, index) => {
 					let stringIndex = index + 1 + "";
