@@ -38,6 +38,7 @@ class Nina extends utils.Adapter {
 		if (this.config.agsArray) {
 			this.agsArray = this.config.agsArray.replace(/ /g, '').split(",");
 		}
+		this.agsArray.push("Beispielwarnung")
 		request.get({
 			url: "https://warnung.bund.de/assets/json/suche_channel.json",
 			followAllRedirects: true
@@ -64,6 +65,18 @@ class Nina extends utils.Adapter {
 					},
 					native: {}
 				});
+				this.setObjectNotExists(element + ".numberOfWarn", {
+					type: "state",
+					common: {
+						name: "Anzahl der aktuellen Warnungen",
+						role: "indicator",
+						type: "number",
+						write: false,
+						read: true
+					},
+					native: {}
+				});
+				this.setState(element + ".numberOfWarn", 0, true);
 			});
 		});
 		this.interval = setInterval(() => {
@@ -100,6 +113,9 @@ class Nina extends utils.Adapter {
 						);
 					}
 				});
+				this.agsArray.forEach(element => {
+					this.setState(element + ".numberOfWarn", 0, true);
+				});
 
 				setTimeout(() => {
 					request.get({
@@ -116,6 +132,9 @@ class Nina extends utils.Adapter {
 							const gefahren = JSON.parse(body);
 							this.setState("info.connection", true, true);
 							const currentGefahren = {};
+							if (gefahren.length > 0) {
+								currentGefahren["Beispielwarnung"] = [gefahren[0]];
+							}
 							gefahren.forEach(element => {
 								element.info.forEach(infoElement => {
 									infoElement.area.forEach(areaElement => {
@@ -153,6 +172,7 @@ class Nina extends utils.Adapter {
 			const adapter = this;
 
 			Object.keys(currentGefahren).forEach(areaCode => {
+				this.setState(areaCode + ".numberOfWarn", currentGefahren[areaCode].length, true);
 				currentGefahren[areaCode].forEach((element, index) => {
 					let stringIndex = index + 1 + "";
 					while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
