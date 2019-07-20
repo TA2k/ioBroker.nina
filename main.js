@@ -24,6 +24,8 @@ class Nina extends utils.Adapter {
 		// this.on("stateChange", this.onStateChange.bind(this));
 		// this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
+
+		this.currentGefahren = {};
 	}
 
 	/**
@@ -81,25 +83,23 @@ class Nina extends utils.Adapter {
 		});
 		this.interval = setInterval(() => {
 			this.resetWarnings();
-			this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
-			this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
-			this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
-
+			const gefahrenPromise = this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
+			const unwetterPromise = this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
+			const hochwasserPromise = this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
+			Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise])
+				.then(values => {
+					this.setGefahren();
+				});
 		}, this.config.interval * 1000 * 60);
+
 		this.resetWarnings();
-		this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
-		this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
-		this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
-		// in this template all states changes inside the adapters namespace are subscribed
-		//this.subscribeStates("*");
-
-
-		// same thing, but the value is flagged "ack"
-		// ack should be always set to true if the value is received from or acknowledged from the target system
-		// await this.setStateAsync("testVariable", {
-		// 	val: true,
-		// 	ack: true
-		// });
+		const gefahrenPromise = this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
+		const unwetterPromise = this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
+		const hochwasserPromise = this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
+		Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise])
+			.then(values => {
+				this.setGefahren();
+			});
 	}
 
 	parseJSON(url) {
@@ -119,9 +119,9 @@ class Nina extends utils.Adapter {
 						this.log.debug(body);
 						const gefahren = JSON.parse(body);
 						this.setState("info.connection", true, true);
-						const currentGefahren = {};
+
 						if (gefahren.length > 0) {
-							currentGefahren["Beispielwarnung"] = [gefahren[0]];
+							this.currentGefahren["Beispielwarnung"] = [gefahren[0]];
 						}
 						gefahren.forEach(element => {
 							element.info.forEach(infoElement => {
@@ -129,10 +129,10 @@ class Nina extends utils.Adapter {
 									areaElement.geocode.forEach(geoElement => {
 										const trimmedAreaCode = geoElement.value.replace(new RegExp("[0]+$"), "");
 										if (this.agsArray.indexOf(trimmedAreaCode) !== -1) {
-											if (currentGefahren[trimmedAreaCode]) {
-												currentGefahren[trimmedAreaCode].push(element);
+											if (this.currentGefahren[trimmedAreaCode]) {
+												this.currentGefahren[trimmedAreaCode].push(element);
 											} else {
-												currentGefahren[trimmedAreaCode] = [element];
+												this.currentGefahren[trimmedAreaCode] = [element];
 											}
 										}
 									});
@@ -140,9 +140,9 @@ class Nina extends utils.Adapter {
 
 							});
 						});
-						this.setGefahren(currentGefahren).then(() => {
-							resolve();
-						})
+
+						resolve();
+
 
 					} catch (error) {
 						this.log.error(JSON.stringify(error));
@@ -156,6 +156,7 @@ class Nina extends utils.Adapter {
 		});
 	}
 	resetWarnings() {
+		this.currentGefahren = {};
 		const pre = this.name + "." + this.instance;
 		this.getStates(pre + ".*", (err, states) => {
 			const allIds = Object.keys(states);
@@ -173,13 +174,13 @@ class Nina extends utils.Adapter {
 		});
 	}
 
-	setGefahren(currentGefahren) {
+	setGefahren() {
 		return new Promise((resolve, reject) => {
 			const adapter = this;
 
-			Object.keys(currentGefahren).forEach(areaCode => {
-				this.setState(areaCode + ".numberOfWarn", currentGefahren[areaCode].length, true);
-				currentGefahren[areaCode].forEach((element, index) => {
+			Object.keys(this.currentGefahren).forEach(areaCode => {
+				this.setState(areaCode + ".numberOfWarn", this.currentGefahren[areaCode].length, true);
+				this.currentGefahren[areaCode].forEach((element, index) => {
 					let stringIndex = index + 1 + "";
 					while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
 					traverse(element).forEach(function (value) {
