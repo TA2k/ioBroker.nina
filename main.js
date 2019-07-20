@@ -80,11 +80,16 @@ class Nina extends utils.Adapter {
 			});
 		});
 		this.interval = setInterval(() => {
-
-			this.parseJSON();
+			this.resetWarnings();
+			this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
+			this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
+			this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
 
 		}, this.config.interval * 1000 * 60);
-		this.parseJSON();
+		this.resetWarnings();
+		this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
+		this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
+		this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
 		// in this template all states changes inside the adapters namespace are subscribed
 		//this.subscribeStates("*");
 
@@ -97,76 +102,77 @@ class Nina extends utils.Adapter {
 		// });
 	}
 
-	parseJSON() {
+	parseJSON(url) {
 		return new Promise((resolve, reject) => {
-			const pre = this.name + "." + this.instance;
-			this.getStates(pre + ".*", (err, states) => {
-				const allIds = Object.keys(states);
 
-				allIds.forEach((keyName) => {
-					if (keyName.indexOf("warnung") !== -1) {
-						this.delObject(
-							keyName
-							.split(".")
-							.slice(2)
-							.join(".")
-						);
+			setTimeout(() => {
+				request.get({
+					url: url,
+					followAllRedirects: true
+				}, (err, resp, body) => {
+					if (err) {
+						this.log.error(JSON.stringify(err));
+						reject();
+						this.setState("info.connection", false, true);
+					}
+					try {
+						this.log.debug(body);
+						const gefahren = JSON.parse(body);
+						this.setState("info.connection", true, true);
+						const currentGefahren = {};
+						if (gefahren.length > 0) {
+							currentGefahren["Beispielwarnung"] = [gefahren[0]];
+						}
+						gefahren.forEach(element => {
+							element.info.forEach(infoElement => {
+								infoElement.area.forEach(areaElement => {
+									areaElement.geocode.forEach(geoElement => {
+										const trimmedAreaCode = geoElement.value.replace(new RegExp("[0]+$"), "");
+										if (this.agsArray.indexOf(trimmedAreaCode) !== -1) {
+											if (currentGefahren[trimmedAreaCode]) {
+												currentGefahren[trimmedAreaCode].push(element);
+											} else {
+												currentGefahren[trimmedAreaCode] = [element];
+											}
+										}
+									});
+								});
+
+							});
+						});
+						this.setGefahren(currentGefahren).then(() => {
+							resolve();
+						})
+
+					} catch (error) {
+						this.log.error(JSON.stringify(error));
+						this.setState("info.connection", false, true);
+						reject();
+
 					}
 				});
-				this.agsArray.forEach(element => {
-					this.setState(element + ".numberOfWarn", 0, true);
-				});
+			}, 500);
 
-				setTimeout(() => {
-					request.get({
-						url: "https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json",
-						followAllRedirects: true
-					}, (err, resp, body) => {
-						if (err) {
-							this.log.error(JSON.stringify(err));
-							reject();
-							this.setState("info.connection", false, true);
-						}
-						try {
-							this.log.debug(body);
-							const gefahren = JSON.parse(body);
-							this.setState("info.connection", true, true);
-							const currentGefahren = {};
-							if (gefahren.length > 0) {
-								currentGefahren["Beispielwarnung"] = [gefahren[0]];
-							}
-							gefahren.forEach(element => {
-								element.info.forEach(infoElement => {
-									infoElement.area.forEach(areaElement => {
-										areaElement.geocode.forEach(geoElement => {
-											const trimmedAreaCode = geoElement.value.replace(new RegExp("[0]+$"), "");
-											if (this.agsArray.indexOf(trimmedAreaCode) !== -1) {
-												if (currentGefahren[trimmedAreaCode]) {
-													currentGefahren[trimmedAreaCode].push(element);
-												} else {
-													currentGefahren[trimmedAreaCode] = [element];
-												}
-											}
-										});
-									});
-
-								});
-							});
-							this.setGefahren(currentGefahren).then(() => {
-								resolve();
-							})
-
-						} catch (error) {
-							this.log.error(JSON.stringify(error));
-							this.setState("info.connection", false, true);
-							reject();
-
-						}
-					});
-				}, 500);
+		});
+	}
+	resetWarnings() {
+		const pre = this.name + "." + this.instance;
+		this.getStates(pre + ".*", (err, states) => {
+			const allIds = Object.keys(states);
+			allIds.forEach((keyName) => {
+				if (keyName.indexOf(".warnung") !== -1) {
+					this.delObject(keyName
+						.split(".")
+						.slice(2)
+						.join("."));
+				}
+			});
+			this.agsArray.forEach(element => {
+				this.setState(element + ".numberOfWarn", 0, true);
 			});
 		});
 	}
+
 	setGefahren(currentGefahren) {
 		return new Promise((resolve, reject) => {
 			const adapter = this;

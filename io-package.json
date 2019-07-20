@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "nina",
-		"version": "0.0.2",
+		"version": "0.0.3",
 		"news": {
+			"0.0.3": {
+				"de": "Unwetter und Hochwasserwarnungen hinzugefügt"
+			},
 			"0.0.1": {
 				"en": "initial release",
 				"de": "Erstveröffentlichung",

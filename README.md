@@ -19,6 +19,10 @@ Notfall-Informations- und Nachrichten-App
 
 ## Changelog
 
+### 0.0.3
+
+-   (tomboxi) Unwetter und Hochwasserwarnungen hinzugefügt
+
 ### 0.0.1
 
 -   (tomboxi) initial release
