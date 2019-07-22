@@ -19,6 +19,14 @@ Notfall-Informations- und Nachrichten-App
 
 ## Changelog
 
+### 0.0.5
+
+-   (tomboxi) Option für Beispielwarnung
+
+### 0.0.4
+
+-   (tomboxi) Mehrere Warnungen werden jetzt korrekt angezeigt.
+
 ### 0.0.3
 
 -   (tomboxi) Unwetter und Hochwasserwarnungen hinzugefügt

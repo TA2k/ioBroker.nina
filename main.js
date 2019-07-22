@@ -40,7 +40,10 @@ class Nina extends utils.Adapter {
 		if (this.config.agsArray) {
 			this.agsArray = this.config.agsArray.replace(/ /g, '').split(",");
 		}
-		this.agsArray.push("Beispielwarnung")
+		if (this.config.example) {
+			this.agsArray.push("Beispielwarnung")
+
+		}
 		request.get({
 			url: "https://warnung.bund.de/assets/json/suche_channel.json",
 			followAllRedirects: true
@@ -120,7 +123,7 @@ class Nina extends utils.Adapter {
 						const gefahren = JSON.parse(body);
 						this.setState("info.connection", true, true);
 
-						if (gefahren.length > 0) {
+						if (gefahren.length > 0 && this.config.example) {
 							this.currentGefahren["Beispielwarnung"] = [gefahren[0]];
 						}
 						gefahren.forEach(element => {

@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "nina",
-		"version": "0.0.4",
+		"version": "0.0.5",
 		"news": {
+			"0.0.5": {
+				"de": "Option für Beispielwarnung."
+			},
 			"0.0.4": {
 				"de": "Mehrere Warnungen werden jetzt korrekt angezeigt."
 			},
@@ -76,7 +79,8 @@
 	},
 	"native": {
 		"interval": 5,
-		"rsArray": ""
+		"rsArray": "",
+		"example": false
 	},
 	"objects": [],
 	"instanceObjects": [
