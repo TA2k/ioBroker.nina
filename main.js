@@ -7,7 +7,7 @@
 
 const utils = require("@iobroker/adapter-core");
 const request = require("request");
-const traverse = require('traverse');
+const traverse = require("traverse");
 
 class Nina extends utils.Adapter {
 
@@ -36,12 +36,27 @@ class Nina extends utils.Adapter {
 
 		// Reset the connection indicator during startup
 		this.setState("info.connection", false, true);
-		this.agsArray = []
+
+		//clean all ags /devices
+		const pre = this.name + "." + this.instance;
+		this.getStates(pre + ".*", (err, states) => {
+			const allIds = Object.keys(states);
+			allIds.forEach((keyName) => {
+				this.delObject(keyName
+					.split(".")
+					.slice(2)
+					.join("."));
+
+			});
+		});
+
+
+		this.agsArray = [];
 		if (this.config.agsArray) {
-			this.agsArray = this.config.agsArray.replace(/ /g, '').split(",");
+			this.agsArray = this.config.agsArray.replace(/ /g, "").split(",");
 		}
 		if (this.config.example) {
-			this.agsArray.push("Beispielwarnung")
+			this.agsArray.push("Beispielwarnung");
 
 		}
 		request.get({
@@ -107,7 +122,6 @@ class Nina extends utils.Adapter {
 
 	parseJSON(url) {
 		return new Promise((resolve, reject) => {
-
 			setTimeout(() => {
 				request.get({
 					url: url,
@@ -148,7 +162,8 @@ class Nina extends utils.Adapter {
 
 
 					} catch (error) {
-						this.log.error(JSON.stringify(error));
+						this.log.error(error + " " + JSON.stringify(error));
+						this.log.info(body);
 						this.setState("info.connection", false, true);
 						reject();
 
@@ -188,7 +203,7 @@ class Nina extends utils.Adapter {
 					while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
 					traverse(element).forEach(function (value) {
 						if (this.path.length > 0 && this.isLeaf) {
-							let modPath = this.path;
+							const modPath = this.path;
 							this.path.forEach((pathElement, pathIndex) => {
 								if (!isNaN(parseInt(pathElement))) {
 									let stringPathIndex = parseInt(pathElement) + 1 + "";
