@@ -128,7 +128,7 @@ class Nina extends utils.Adapter {
 					followAllRedirects: true
 				}, (err, resp, body) => {
 					if (err) {
-						this.log.error(JSON.stringify(err));
+						this.log.error("Request error:" + err + JSON.stringify(err));
 						reject();
 						this.setState("info.connection", false, true);
 					}
@@ -162,7 +162,7 @@ class Nina extends utils.Adapter {
 
 
 					} catch (error) {
-						this.log.error(error + " " + JSON.stringify(error));
+						this.log.error("Parse error:" + error + " " + JSON.stringify(error));
 						this.log.info(body);
 						this.setState("info.connection", false, true);
 						reject();
