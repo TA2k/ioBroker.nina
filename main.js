@@ -96,7 +96,7 @@ class Nina extends utils.Adapter {
 					},
 					native: {}
 				});
-				this.setState(element + ".numberOfWarn", 0, true);
+
 			});
 		});
 		this.interval = setInterval(() => {
@@ -140,6 +140,9 @@ class Nina extends utils.Adapter {
 						if (gefahren.length > 0 && this.config.example) {
 							this.currentGefahren["Beispielwarnung"] = [gefahren[0]];
 						}
+
+
+						//parseJson
 						gefahren.forEach(element => {
 							element.info.forEach(infoElement => {
 								infoElement.area.forEach(areaElement => {
@@ -162,8 +165,8 @@ class Nina extends utils.Adapter {
 
 
 					} catch (error) {
-						this.log.error("Parse error:" + error + " " + JSON.stringify(error));
-						this.log.info(body);
+						this.log.error("Website sends unparsable data, this happens sometimes: " + error + " " + JSON.stringify(error));
+						this.log.debug(body);
 						this.setState("info.connection", false, true);
 						reject();
 
@@ -186,9 +189,10 @@ class Nina extends utils.Adapter {
 						.join("."));
 				}
 			});
-			this.agsArray.forEach(element => {
-				this.setState(element + ".numberOfWarn", 0, true);
-			});
+		});
+		//create empty current GefahrenObject to have correct numberofWarn
+		this.agsArray.forEach(element => {
+			this.currentGefahren[element] = [];
 		});
 	}
 
