@@ -104,8 +104,9 @@ class Nina extends utils.Adapter {
 			const gefahrenPromise = this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
 			const unwetterPromise = this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
 			const hochwasserPromise = this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
-			const warnMeldung = this.parseJSON("https://warnung.bund.de/bbk.biwapp/warnmeldungen.json");
-			Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, warnMeldung])
+			const biwapp = this.parseJSON("https://warnung.bund.de/bbk.biwapp/warnmeldungen.json");
+			const katwarn = this.parseJSON("https://warnung.bund.de/bbk.katwarn/warnmeldungen.json");
+			Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, biwapp, katwarn])
 				.then(values => {
 					this.setGefahren();
 				});
@@ -115,8 +116,9 @@ class Nina extends utils.Adapter {
 		const gefahrenPromise = this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
 		const unwetterPromise = this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
 		const hochwasserPromise = this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
-		const warnMeldung = this.parseJSON("https://warnung.bund.de/bbk.biwapp/warnmeldungen.json");
-		Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, warnMeldung])
+		const biwapp = this.parseJSON("https://warnung.bund.de/bbk.biwapp/warnmeldungen.json");
+		const katwarn = this.parseJSON("https://warnung.bund.de/bbk.katwarn/warnmeldungen.json");
+		Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, biwapp, katwarn])
 			.then(values => {
 				this.setGefahren();
 			});

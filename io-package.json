@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "nina",
-		"version": "0.0.7",
+		"version": "0.0.8",
 		"news": {
+			"0.0.8": {
+				"de": "Katwarn Warnungen hinzugefügt."
+			},
 			"0.0.7": {
 				"de": "BiwApp Warnungen hinzugefügt."
 			},
