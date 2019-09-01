@@ -104,7 +104,8 @@ class Nina extends utils.Adapter {
 			const gefahrenPromise = this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
 			const unwetterPromise = this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
 			const hochwasserPromise = this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
-			Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise])
+			const warnMeldung = this.parseJSON("https://warnung.bund.de/bbk.biwapp/warnmeldungen.json");
+			Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, warnMeldung])
 				.then(values => {
 					this.setGefahren();
 				});
@@ -114,7 +115,8 @@ class Nina extends utils.Adapter {
 		const gefahrenPromise = this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
 		const unwetterPromise = this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
 		const hochwasserPromise = this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
-		Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise])
+		const warnMeldung = this.parseJSON("https://warnung.bund.de/bbk.biwapp/warnmeldungen.json");
+		Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, warnMeldung])
 			.then(values => {
 				this.setGefahren();
 			});
@@ -128,7 +130,7 @@ class Nina extends utils.Adapter {
 					followAllRedirects: true
 				}, (err, resp, body) => {
 					if (err) {
-						this.log.error("Request error:" + err + JSON.stringify(err));
+						this.log.error("Request error" + JSON.stringify(err));
 						reject();
 						this.setState("info.connection", false, true);
 					}
@@ -165,7 +167,7 @@ class Nina extends utils.Adapter {
 
 
 					} catch (error) {
-						this.log.error("Website sends unparsable data, this happens sometimes: " + error + " " + JSON.stringify(error));
+						this.log.warn("Website sends unparsable data, you can ignore if it happens only once: " + error + " " + JSON.stringify(error));
 						this.log.debug(body);
 						this.setState("info.connection", false, true);
 						reject();

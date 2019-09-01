@@ -19,6 +19,10 @@ Notfall-Informations- und Nachrichten-App
 
 ## Changelog
 
+### 0.0.7
+
+-   (tomboxi) BiwApp Warnungen hinzugefügt.
+
 ### 0.0.6
 
 -   (tomboxi) NumberOfWarns werden nur geändert wenn eine Änderung vorliegt
