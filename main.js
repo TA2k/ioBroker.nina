@@ -42,7 +42,7 @@ class Nina extends utils.Adapter {
 		this.getStates(pre + ".*", (err, states) => {
 			const allIds = Object.keys([states]);
 			allIds.forEach((keyName) => {
-				if (!states[keyName]) {
+				if (keyName.indexOf(".info.connection") === -1) {
 				this.delObject(keyName
 					.split(".")
 					.slice(2)
