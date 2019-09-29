@@ -40,12 +40,14 @@ class Nina extends utils.Adapter {
 		//clean all ags /devices
 		const pre = this.name + "." + this.instance;
 		this.getStates(pre + ".*", (err, states) => {
-			const allIds = Object.keys(states);
+			const allIds = Object.keys([states]);
 			allIds.forEach((keyName) => {
+				if (!states[keyName]) {
 				this.delObject(keyName
 					.split(".")
 					.slice(2)
 					.join("."));
+				}
 
 			});
 		});

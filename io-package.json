@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "nina",
-		"version": "0.0.8",
+		"version": "0.0.9",
 		"news": {
+			"0.0.9": {
+				"de": "Fix Info connection"
+			},
 			"0.0.8": {
 				"de": "Katwarn Warnungen hinzugefügt."
 			},

@@ -29,6 +29,10 @@ https://warnung.bund.de/assets/json/suche_channel.json
 
 ## Changelog
 
+### 0.0.9
+
+-   (tomboxi) Fix Info connection.
+
 ### 0.0.8
 
 -   (tomboxi) Katwarn Warnungen hinzugefügt.
