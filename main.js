@@ -42,7 +42,7 @@ class Nina extends utils.Adapter {
 		this.getStates(pre + ".*", (err, states) => {
 			const allIds = Object.keys(states);
 			allIds.forEach((keyName) => {
-				if (keyName.indexOf(".info.connection") === -1) {
+				if (!states[keyName]) {
 				this.delObject(keyName
 					.split(".")
 					.slice(2)
@@ -131,7 +131,8 @@ class Nina extends utils.Adapter {
 			setTimeout(() => {
 				request.get({
 					url: url,
-					followAllRedirects: true
+					followAllRedirects: true,
+					gzip: true
 				}, (err, resp, body) => {
 					if (err) {
 						this.log.error("Request error" + JSON.stringify(err));
@@ -171,7 +172,7 @@ class Nina extends utils.Adapter {
 
 
 					} catch (error) {
-						this.log.warn("Website sends unparsable data, you can ignore if it happens only once: " + error + " " + JSON.stringify(error));
+						this.log.error(error + " " + JSON.stringify(error));
 						this.log.debug(body);
 						this.setState("info.connection", false, true);
 						reject();

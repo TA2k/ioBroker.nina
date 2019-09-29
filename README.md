@@ -19,9 +19,9 @@ Notfall-Informations- und Nachrichten-App
 
 ## Changelog
 
-### 0.0.9
+### 0.0.12
 
--   (tomboxi) Fix Info connection.
+-   (tomboxi) Fix Info connection, improve deleting, fix gzip problem.
 
 ### 0.0.8
 
