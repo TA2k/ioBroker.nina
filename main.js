@@ -40,7 +40,7 @@ class Nina extends utils.Adapter {
 		//clean all ags /devices
 		const pre = this.name + "." + this.instance;
 		this.getStates(pre + ".*", (err, states) => {
-			const allIds = Object.keys([states]);
+			const allIds = Object.keys(states);
 			allIds.forEach((keyName) => {
 				if (keyName.indexOf(".info.connection") === -1) {
 				this.delObject(keyName
