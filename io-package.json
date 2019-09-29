@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "nina",
-		"version": "0.0.9",
+		"version": "0.0.10",
 		"news": {
+			"0.0.10": {
+				"de": "Fix warning not visible"
+			},
 			"0.0.9": {
 				"de": "Fix Info connection"
 			},
