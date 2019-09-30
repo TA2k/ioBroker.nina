@@ -15,7 +15,18 @@
 
 Notfall-Informations- und Nachrichten-App
 
-### Getting started
+https://www.bbk.bund.de/DE/NINA/Warn-App_NINA.html
+
+https://warnung.bund.de/
+
+### Getting started	### Getting started
+
+
+Die AGS deines Landkreises oder kommasepariert mehrere AGS eingeben.
+
+Liste der AGS mit Strg+F suchen:
+
+https://warnung.bund.de/assets/json/suche_channel.json
 
 ## Changelog
 
