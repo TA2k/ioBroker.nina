@@ -30,6 +30,10 @@ https://warnung.bund.de/assets/json/suche_channel.json
 
 ## Changelog
 
+### 0.0.13
+
+-   (tomboxi) Identifierliste hinzugefügt.
+
 ### 0.0.12
 
 -   (tomboxi) Fix Info connection, improve deleting, fix gzip problem.
