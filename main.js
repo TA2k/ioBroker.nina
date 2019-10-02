@@ -98,6 +98,17 @@ class Nina extends utils.Adapter {
 					},
 					native: {}
 				});
+				this.setObjectNotExists(element + ".identifierList", {
+					type: "state",
+					common: {
+						name: "Liste der Warnungenidentifier",
+						role: "state",
+						type: "array",
+						write: false,
+						read: true
+					},
+					native: {}
+				});
 
 			});
 		});
@@ -206,10 +217,12 @@ class Nina extends utils.Adapter {
 	setGefahren() {
 		return new Promise((resolve, reject) => {
 			const adapter = this;
-
 			Object.keys(this.currentGefahren).forEach(areaCode => {
 				this.setState(areaCode + ".numberOfWarn", this.currentGefahren[areaCode].length, true);
+				
+				let identifierList = [];
 				this.currentGefahren[areaCode].forEach((element, index) => {
+					identifierList.push(element.identifier)
 					let stringIndex = index + 1 + "";
 					while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
 					traverse(element).forEach(function (value) {
@@ -243,6 +256,7 @@ class Nina extends utils.Adapter {
 					});
 				});
 
+				this.setState(areaCode + ".identifierList",  {val: identifierList, ack:true});
 
 			});
 			resolve();
