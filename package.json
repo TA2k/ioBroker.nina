@@ -1,25 +1,4 @@
 {
-  "_from": "https://github.com/TA2k/ioBroker.nina/tarball/master",
-  "_id": "iobroker.nina@0.0.1",
-  "_inBundle": false,
-  "_integrity": "sha512-w9zfGkNUPrai/F1Xn8nuJm1Zk1HgoWVQN5e5H/IKftGTL0uu/WwiOgFMKppHrRcBsu5l/Xo01oa7kvlCrK/32g==",
-  "_location": "/iobroker.nina",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "remote",
-    "raw": "https://github.com/TA2k/ioBroker.nina/tarball/master",
-    "rawSpec": "https://github.com/TA2k/ioBroker.nina/tarball/master",
-    "saveSpec": "https://github.com/TA2k/ioBroker.nina/tarball/master",
-    "fetchSpec": "https://github.com/TA2k/ioBroker.nina/tarball/master"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://github.com/TA2k/ioBroker.nina/tarball/master",
-  "_shasum": "ee473c3adb15f7201f133ae4b3c99a43212d6239",
-  "_spec": "https://github.com/TA2k/ioBroker.nina/tarball/master",
-  "_where": "/Users/d057119/Development",
   "author": {
     "name": "tomboxi",
     "email": "tombox_2020@gmail.com"
@@ -77,5 +56,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "0.0.13"
+  "version": "0.0.14"
 }

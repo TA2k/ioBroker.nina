@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "nina",
-		"version": "0.0.13",
+		"version": "0.0.14",
 		"news": {
+			"0.0.14": {
+				"de": "Fix für AGS die auf 0 enden"
+			},
 			"0.0.13": {
 				"de": "Identifierliste hinzugefügt"
 			},
