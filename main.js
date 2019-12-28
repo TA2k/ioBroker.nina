@@ -178,9 +178,14 @@ class Nina extends utils.Adapter {
 
                             resolve();
                         } catch (error) {
-                            this.log.error(error + " " + JSON.stringify(error));
-                            this.log.debug(body);
-                            this.setState("info.connection", false, true);
+                            if (body.indexOf("403 Forbidden") !== -1) {
+                                this.log.debug("Nina was not responding correctly");
+                                this.log.debug(body);
+                            } else {
+                                this.log.error(error + " " + JSON.stringify(error));
+                                this.log.error(body);
+                                this.setState("info.connection", false, true);
+                            }
                             reject();
                         }
                     }

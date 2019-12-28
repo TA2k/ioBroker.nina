@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "nina",
-		"version": "0.0.14",
+		"version": "0.0.15",
 		"news": {
+			"0.0.15": {
+				"de": "403 Fehlermeldungen werden ignoriert"
+			},
 			"0.0.14": {
 				"de": "Fix für AGS die auf 0 enden"
 			},
