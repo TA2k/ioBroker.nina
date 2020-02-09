@@ -1,136 +1,141 @@
 {
-	"common": {
-		"name": "nina",
-		"version": "0.0.15",
-		"news": {
-			"0.0.15": {
-				"de": "403 Fehlermeldungen werden ignoriert"
-			},
-			"0.0.14": {
-				"de": "Fix für AGS die auf 0 enden"
-			},
-			"0.0.13": {
-				"de": "Identifierliste hinzugefügt"
-			},
-			"0.0.12": {
-				"de": "Improve deleting, fix gzip problem"
-			},
-			"0.0.11": {
-				"de": "Fix warning not visible"
-			},
-			"0.0.9": {
-				"de": "Fix Info connection"
-			},
-			"0.0.8": {
-				"de": "Katwarn Warnungen hinzugefügt."
-			},
-			"0.0.7": {
-				"de": "BiwApp Warnungen hinzugefügt."
-			},
-			"0.0.6": {
-				"de": "NumberOfWarns werden nur geändert wenn eine Änderung vorliegt"
-			},
-			"0.0.5": {
-				"de": "Option für Beispielwarnung."
-			},
-			"0.0.4": {
-				"de": "Mehrere Warnungen werden jetzt korrekt angezeigt."
-			},
-			"0.0.3": {
-				"de": "Unwetter und Hochwasserwarnungen hinzugefügt"
-			},
-			"0.0.1": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie",
-				"zh-cn": "首次出版"
-			}
-		},
-		"title": "Notfall-Informations- und Nachrichten-App",
-		"titleLang": {
-			"en": "Notfall-Informations- und Nachrichten-App",
-			"de": "Notfall-Informations- und Nachrichten-App",
-			"ru": "Notfall-информация- и Nachrichten-приложение",
-			"pt": "Notfall-Informations- und Nachrichten-App",
-			"nl": "Notfall-Informations- und Nachrichten-App",
-			"fr": "Notfall-Informations- und Nachrichten-App",
-			"it": "Notfall-Informations- und Nachrichten-App",
-			"es": "Notfall-Informations- und Nachrichten-App",
-			"pl": "Notfall-Informations- und Nachrichten-App",
-			"zh-cn": "Notfall-Informations- und Nachrichten-App"
-		},
-		"desc": {
-			"en": "Notfall-Informations- und Nachrichten-App",
-			"de": "Notfall-Informations- und Nachrichten-App",
-			"ru": "Notfall-информация- и Nachrichten-приложение",
-			"pt": "Notfall-Informations- und Nachrichten-App",
-			"nl": "Notfall-Informations- und Nachrichten-App",
-			"fr": "Notfall-Informations- und Nachrichten-App",
-			"it": "Notfall-Informations- und Nachrichten-App",
-			"es": "Notfall-Informations- und Nachrichten-App",
-			"pl": "Notfall-Informations- und Nachrichten-App",
-			"zh-cn": "Notfall-Informations- und Nachrichten-App"
-		},
-		"authors": [
-			"tomboxi <tombox_2020@gmail.com>"
-		],
-		"keywords": [
-			"NINA",
-			"Gefahrenwarnung",
-			"Warnung",
-			"KATWARN"
-		],
-		"license": "MIT",
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
-		"icon": "nina.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.nina/master/admin/nina.png",
-		"readme": "https://github.com/TA2k/ioBroker.nina/blob/master/README.md",
-		"loglevel": "info",
-		"mode": "daemon",
-		"type": "misc-data",
-		"compact": true,
-		"materialize": true,
-		"dependencies": [
-			{
-				"js-controller": ">=1.4.2"
-			}
-		]
-	},
-	"native": {
-		"interval": 5,
-		"rsArray": "",
-		"example": false
-	},
-	"objects": [],
-	"instanceObjects": [
-		{
-			"_id": "info",
-			"type": "channel",
-			"common": {
-				"name": "Information"
-			},
-			"native": {}
-		},
-		{
-			"_id": "info.connection",
-			"type": "state",
-			"common": {
-				"role": "indicator.connected",
-				"name": "Device or service connected",
-				"type": "boolean",
-				"read": true,
-				"write": false,
-				"def": false
-			},
-			"native": {}
-		}
-	]
+  "common": {
+    "name": "nina",
+    "version": "0.0.16",
+    "news": {
+      "0.0.16": {
+        "de": "Bessere Fehlerhandling und Option zum ignorieren der areas hinzugefügt."
+      },
+      "0.0.15": {
+        "de": "403 Fehlermeldungen werden ignoriert"
+      },
+      "0.0.14": {
+        "de": "Fix für AGS die auf 0 enden"
+      },
+      "0.0.13": {
+        "de": "Identifierliste hinzugefügt"
+      },
+      "0.0.12": {
+        "de": "Improve deleting, fix gzip problem"
+      },
+      "0.0.11": {
+        "de": "Fix warning not visible"
+      },
+      "0.0.9": {
+        "de": "Fix Info connection"
+      },
+      "0.0.8": {
+        "de": "Katwarn Warnungen hinzugefügt."
+      },
+      "0.0.7": {
+        "de": "BiwApp Warnungen hinzugefügt."
+      },
+      "0.0.6": {
+        "de": "NumberOfWarns werden nur geändert wenn eine Änderung vorliegt"
+      },
+      "0.0.5": {
+        "de": "Option für Beispielwarnung."
+      },
+      "0.0.4": {
+        "de": "Mehrere Warnungen werden jetzt korrekt angezeigt."
+      },
+      "0.0.3": {
+        "de": "Unwetter und Hochwasserwarnungen hinzugefügt"
+      },
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "首次出版"
+      }
+    },
+    "title": "Notfall-Informations- und Nachrichten-App",
+    "titleLang": {
+      "en": "Notfall-Informations- und Nachrichten-App",
+      "de": "Notfall-Informations- und Nachrichten-App",
+      "ru": "Notfall-информация- и Nachrichten-приложение",
+      "pt": "Notfall-Informations- und Nachrichten-App",
+      "nl": "Notfall-Informations- und Nachrichten-App",
+      "fr": "Notfall-Informations- und Nachrichten-App",
+      "it": "Notfall-Informations- und Nachrichten-App",
+      "es": "Notfall-Informations- und Nachrichten-App",
+      "pl": "Notfall-Informations- und Nachrichten-App",
+      "zh-cn": "Notfall-Informations- und Nachrichten-App"
+    },
+    "desc": {
+      "en": "Notfall-Informations- und Nachrichten-App",
+      "de": "Notfall-Informations- und Nachrichten-App",
+      "ru": "Notfall-информация- и Nachrichten-приложение",
+      "pt": "Notfall-Informations- und Nachrichten-App",
+      "nl": "Notfall-Informations- und Nachrichten-App",
+      "fr": "Notfall-Informations- und Nachrichten-App",
+      "it": "Notfall-Informations- und Nachrichten-App",
+      "es": "Notfall-Informations- und Nachrichten-App",
+      "pl": "Notfall-Informations- und Nachrichten-App",
+      "zh-cn": "Notfall-Informations- und Nachrichten-App"
+    },
+    "authors": [
+      "tomboxi <tombox_2020@gmail.com>"
+    ],
+    "keywords": [
+      "NINA",
+      "Gefahrenwarnung",
+      "Warnung",
+      "KATWARN"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "nina.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.nina/master/admin/nina.png",
+    "readme": "https://github.com/TA2k/ioBroker.nina/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "misc-data",
+    "compact": true,
+    "materialize": true,
+    "dependencies": [
+      {
+        "js-controller": ">=1.4.2"
+      }
+    ],
+    "installedFrom": "https://github.com/TA2k/ioBroker.nina/tarball/04528d88b064ffac345da60f2d182f8954369982"
+  },
+  "native": {
+    "interval": 5,
+    "rsArray": "",
+    "example": false,
+    "showArea" : false
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
