@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "nina",
-    "version": "0.0.16",
+    "version": "0.0.17",
     "news": {
-      "0.0.16": {
+      "0.0.17": {
         "de": "Bessere Fehlerhandling und Option zum ignorieren der areas hinzugefügt."
       },
       "0.0.15": {

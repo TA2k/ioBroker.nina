@@ -32,7 +32,7 @@ class Nina extends utils.Adapter {
 		// Reset the connection indicator during startup
 		this.setState("info.connection", false, true);
 
-		
+
 		this.agsArray = [];
 		if (this.config.agsArray) {
 			this.agsArray = this.config.agsArray.replace(/ /g, "").split(",");
@@ -61,14 +61,14 @@ class Nina extends utils.Adapter {
 			{
 				url: "https://warnung.bund.de/assets/json/suche_channel.json",
 				followAllRedirects: true,
-				gzip:true
+				gzip: true
 			},
 			(err, resp, body) => {
 				let channels = {};
 				try {
 					channels = JSON.parse(body.replace(/\r/g, "").replace(/\n/g, ""));
 				} catch (e) {
-					
+
 					this.log.debug(JSON.stringify(e));
 				}
 				this.agsArray.forEach(element => {
@@ -113,13 +113,15 @@ class Nina extends utils.Adapter {
 			}
 		);
 		this.interval = setInterval(() => {
-			this.resetWarnings();
 			const gefahrenPromise = this.parseJSON("https://warnung.bund.de/bbk.mowas/gefahrendurchsagen.json");
 			const unwetterPromise = this.parseJSON("https://warnung.bund.de/bbk.dwd/unwetter.json");
 			const hochwasserPromise = this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
 			const biwapp = this.parseJSON("https://warnung.bund.de/bbk.biwapp/warnmeldungen.json");
 			const katwarn = this.parseJSON("https://warnung.bund.de/bbk.katwarn/warnmeldungen.json");
-			Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, biwapp, katwarn]).finally(values => {
+			Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, biwapp, katwarn]).then(async values => {
+				await this.resetWarnings();
+				this.setGefahren();
+			}).catch(values => {
 				this.setGefahren();
 			});
 		}, this.config.interval * 1000 * 60);
@@ -130,7 +132,9 @@ class Nina extends utils.Adapter {
 		const hochwasserPromise = this.parseJSON("https://warnung.bund.de/bbk.lhp/hochwassermeldungen.json");
 		const biwapp = this.parseJSON("https://warnung.bund.de/bbk.biwapp/warnmeldungen.json");
 		const katwarn = this.parseJSON("https://warnung.bund.de/bbk.katwarn/warnmeldungen.json");
-		Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, biwapp, katwarn]).finally(values => {
+		Promise.all([gefahrenPromise, unwetterPromise, hochwasserPromise, biwapp, katwarn]).then(values => {
+			this.setGefahren();
+		}).catch(values => {
 			this.setGefahren();
 		});
 	}
@@ -154,7 +158,7 @@ class Nina extends utils.Adapter {
 								this.log.warn("Cannot reach " + url + " Server.");
 							} else if (resp && resp.statusCode >= 400) {
 								this.log.warn("Cannot reach " + url + " Server.");
-							} 
+							}
 							if (err) {
 								this.log.error("Request error" + JSON.stringify(err));
 							}
@@ -219,14 +223,15 @@ class Nina extends utils.Adapter {
 			}, 500);
 		});
 	}
-	resetWarnings() {
-		this.currentGefahren = {};
-		const pre = this.name + "." + this.instance;
-		this.getStates(pre + ".*", (err, states) => {
+	async resetWarnings() {
+		return new Promise(async (resolve, reject) => {
+			this.currentGefahren = {};
+			const pre = this.name + "." + this.instance;
+			const states = await this.getStatesAsync(pre + ".*");
 			const allIds = Object.keys(states);
-			allIds.forEach(keyName => {
+			allIds.forEach(async keyName => {
 				if (keyName.indexOf(".warnung") !== -1) {
-					this.delObject(
+					await this.delObjectAsync(
 						keyName
 							.split(".")
 							.slice(2)
@@ -234,10 +239,12 @@ class Nina extends utils.Adapter {
 					);
 				}
 			});
-		});
-		//create empty current GefahrenObject to have correct numberofWarn
-		this.agsArray.forEach(element => {
-			this.currentGefahren[element] = [];
+
+			//create empty current GefahrenObject to have correct numberofWarn
+			this.agsArray.forEach(element => {
+				this.currentGefahren[element] = [];
+			});
+			resolve();
 		});
 	}
 
@@ -252,7 +259,7 @@ class Nina extends utils.Adapter {
 					identifierList.push(element.identifier);
 					let stringIndex = index + 1 + "";
 					while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
-					traverse(element).forEach(function(value) {
+					traverse(element).forEach(function (value) {
 						if (this.path.length > 0 && this.isLeaf) {
 							const modPath = this.path;
 							this.path.forEach((pathElement, pathIndex) => {
