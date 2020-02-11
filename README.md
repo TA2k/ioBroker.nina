@@ -44,6 +44,10 @@ CipherString = DEFAULT@SECLEVEL=1
 
 ## Changelog
 
+### 0.0.18
+
+- (tomboxi) Auslastung reduziert. Objekte werden nur geändert wenn die Warnungen sich ändern.
+
 ### 0.0.17
 
 - (tomboxi) Fehlerbehandlung verbessert. Option zum Deaktiveren der Area Objekte hinzugefügt.

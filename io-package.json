@@ -4,6 +4,9 @@
     "version": "0.0.18",
     "news": {
       "0.0.18": {
+        "de": "Auslastung reduziert. Objekte werden nur geändert wenn die Warnungen sich ändern."
+      },
+      "0.0.17": {
         "de": "Bessere Fehlerhandling und Option zum ignorieren der areas hinzugefügt."
       },
       "0.0.15": {
