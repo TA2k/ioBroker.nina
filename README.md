@@ -44,7 +44,7 @@ CipherString = DEFAULT@SECLEVEL=1
 
 ## Changelog
 
-### 0.0.18
+### 0.0.19
 
 - (tomboxi) Auslastung reduziert. Objekte werden nur geändert wenn die Warnungen sich ändern.
 

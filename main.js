@@ -361,7 +361,8 @@ class Nina extends utils.Adapter {
 						this.status[ags].identifierList = [];
 						const status = JSON.parse(body);
 						status.forEach((bucket) => {
-							this.status[ags].numberOfWarn += bucket.status;
+							this.status[ags].numberOfWarn +=  bucket.cancelCount;
+							this.status[ags].numberOfWarn +=  bucket.activeCount;
 							this.status[ags].cancelWarn += bucket.cancelCount;
 							this.status[ags].activeWarn += bucket.activeCount;
 							this.status[ags].identifierList = this.status[ags].identifierList.concat(bucket.ref);

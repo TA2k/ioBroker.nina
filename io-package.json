@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "nina",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "news": {
-      "0.0.18": {
+      "0.0.19": {
         "de": "Auslastung reduziert. Objekte werden nur geändert wenn die Warnungen sich ändern."
       },
       "0.0.17": {
@@ -108,14 +108,13 @@
       {
         "js-controller": ">=1.4.2"
       }
-    ],
-    "installedFrom": "https://github.com/TA2k/ioBroker.nina/tarball/04528d88b064ffac345da60f2d182f8954369982"
+    ]
   },
   "native": {
     "interval": 5,
     "rsArray": "",
     "example": false,
-    "showArea" : false
+    "showArea": false
   },
   "objects": [],
   "instanceObjects": [
