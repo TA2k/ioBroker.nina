@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "nina",
-    "version": "0.0.19",
+    "version": "0.0.20",
     "news": {
+      "0.0.20": {
+        "de": "Bugfixing."
+      },
       "0.0.19": {
         "de": "Auslastung reduziert. Objekte werden nur geändert wenn die Warnungen sich ändern."
       },
