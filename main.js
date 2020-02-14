@@ -280,9 +280,7 @@ class Nina extends utils.Adapter {
 				searchText = areaCode  + searchText;
 			}
 			if (areaCode && index !== undefined) {
-				if (this.currentGefahren[areaCode][index]) {
-					this.currentGefahren[areaCode].splice(index, 1);
-				}
+			
 				let stringIndex = index + 1 + "";
 				while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
 				searchText = areaCode  + searchText+stringIndex;
