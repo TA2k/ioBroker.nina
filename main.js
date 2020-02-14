@@ -278,8 +278,7 @@ class Nina extends utils.Adapter {
 						delete this.etags[id];
 					}
 				});
-				searchText = areaCode + "." + searchText;
-				this.log.debug("delete");
+				searchText = areaCode  + searchText;
 			}
 			if (areaCode && index !== undefined) {
 				if (this.currentGefahren[areaCode][index]) {
@@ -287,7 +286,7 @@ class Nina extends utils.Adapter {
 				}
 				let stringIndex = index + 1 + "";
 				while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
-				searchText = areaCode + "." + searchText+stringIndex;
+				searchText = areaCode  + searchText+stringIndex;
 			}
 			const pre = this.name + "." + this.instance;
 			const states = await this.getStatesAsync(pre + ".*");
