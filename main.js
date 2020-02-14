@@ -242,8 +242,7 @@ class Nina extends utils.Adapter {
                 						// this.log.debug(body);
                 						const gefahr = JSON.parse(body);
                 						this.setState("info.connection", true, true);
-
-                						this.currentGefahren[areaCode].push(gefahr);
+                						this.currentGefahren[areaCode].splice(index,1,gefahr);
                 						resolve();
                 					} catch (error) {
                 						this.log.error(error + " " + JSON.stringify(error));
