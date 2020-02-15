@@ -135,13 +135,12 @@ class Nina extends utils.Adapter {
 			this.agsArray.forEach(async element => {
 				const promise = new Promise(async (resolve, reject) => {
 					await this.checkStatus(element)
-						.then(() => {
-							this.resetWarnings(element);
+						.then(async () => {
+							await this.resetWarnings(element);
 						})
 						.catch(() => {});
 					await this.getWarnungen(element)
-						.then(() => {
-						})
+						.then(() => {})
 						.catch(() => {});
 					resolve();
 				});
@@ -175,9 +174,11 @@ class Nina extends utils.Adapter {
 	getWarnungen(areaCode) {
 		return new Promise((resolve, reject) => {
 			const promiseArray = [];
+			const refArray = [];
 			this.status[areaCode] &&
                 Object.keys(this.status[areaCode].buckets).forEach(bucket => {
-                	this.status[areaCode].buckets[bucket].forEach((ref, index) => {
+                	this.status[areaCode].buckets[bucket].forEach(ref => {
+                		refArray.push(ref);
                 		const requestPromise = new Promise((resolve, reject) => {
                 			const headers = {};
                 			const url = "https://warnung.bund.de/" + bucket + "/" + ref + ".ohne.json";
@@ -224,8 +225,10 @@ class Nina extends utils.Adapter {
                 						reject();
                 						return;
                 					}
-
+									
                 					try {
+                						const obj = this.currentGefahren[areaCode].find(x => x.identifier === ref);
+                						const index = this.currentGefahren[areaCode].indexOf(obj);
                 						if (resp) {
                 							this.etags[areaCode + url] = resp.headers.etag;
                 							this.log.debug(resp.headers.etag + " " + url);
@@ -235,14 +238,21 @@ class Nina extends utils.Adapter {
                 								return;
                 							} else {
                 								this.log.debug("Changed: " + url);
-                								await this.resetWarnings(areaCode,index);
+                								if (index !== -1) {
+                									await this.resetWarnings(areaCode, index);
+                								}
                 							}
                 						}
 
-                						// this.log.debug(body);
+                						this.log.debug(body);
                 						const gefahr = JSON.parse(body);
                 						this.setState("info.connection", true, true);
-                						this.currentGefahren[areaCode].splice(index,1,gefahr);
+                						if ( index === -1) {
+                							this.currentGefahren[areaCode].push(gefahr);
+                						} else {
+                							this.currentGefahren[areaCode].splice(index, 1, gefahr);
+
+                						}
                 						resolve();
                 					} catch (error) {
                 						this.log.error(error + " " + JSON.stringify(error));
@@ -272,18 +282,17 @@ class Nina extends utils.Adapter {
 			let searchText = ".warnung";
 			if (areaCode && index === undefined) {
 				this.currentGefahren[areaCode] = [];
-				Object.keys(this.etags).forEach((id) => {
-					if (id.startsWith(areaCode) ){
+				Object.keys(this.etags).forEach(id => {
+					if (id.startsWith(areaCode)) {
 						delete this.etags[id];
 					}
 				});
-				searchText = areaCode  + searchText;
+				searchText = areaCode + searchText;
 			}
 			if (areaCode && index !== undefined) {
-			
 				let stringIndex = index + 1 + "";
 				while (stringIndex.length < 2) stringIndex = "0" + stringIndex;
-				searchText = areaCode  + searchText+stringIndex;
+				searchText = areaCode + searchText + stringIndex;
 			}
 			const pre = this.name + "." + this.instance;
 			const states = await this.getStatesAsync(pre + ".*");
