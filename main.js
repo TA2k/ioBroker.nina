@@ -206,23 +206,23 @@ class Nina extends utils.Adapter {
                 						if (err) {
                 							this.log.error("Request error" + JSON.stringify(err));
                 						}
-                						reject();
+                						resolve();
                 						this.setState("info.connection", false, true);
                 						return;
                 					}
                 					if (body.indexOf("The service is temporarily unavailable.") !== -1) {
                 						this.log.warn("cannot reach " + url + " Server.");
-                						reject();
+                						resolve();
                 						return;
                 					}
                 					if (body.indexOf("404 Not found") !== -1) {
                 						this.log.warn("cannot reach " + url + " Server.");
-                						reject();
+                						resolve();
                 						return;
                 					}
                 					if (body.indexOf("403 Forbidden") !== -1) {
                 						this.log.warn("cannot reach " + url + " Server.");
-                						reject();
+                						resolve();
                 						return;
                 					}
 									
@@ -234,7 +234,7 @@ class Nina extends utils.Adapter {
                 							this.log.debug(resp.headers.etag + " " + url);
                 							if (resp.statusCode === 304) {
                 								this.log.debug("304 No values updated");
-                								reject();
+                								resolve();
                 								return;
                 							} else {
                 								this.log.debug("Changed: " + url);
@@ -259,7 +259,7 @@ class Nina extends utils.Adapter {
                 						this.log.debug(body);
                 						this.setState("info.connection", false, true);
 
-                						reject();
+                						resolve();
                 						return;
                 					}
                 				}
