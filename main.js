@@ -297,18 +297,26 @@ class Nina extends utils.Adapter {
 			const pre = this.name + "." + this.instance;
 			const states = await this.getStatesAsync(pre + ".*");
 			const allIds = Object.keys(states);
+			const promiseArray = [];
 			allIds.forEach(async keyName => {
-				if (keyName.indexOf(searchText) !== -1) {
-					await this.delObjectAsync(
-						keyName
-							.split(".")
-							.slice(2)
-							.join(".")
-					);
-				}
+				const promise = new Promise(async (resolve, reject) => {
+					if (keyName.indexOf(searchText) !== -1) {
+						await this.delObjectAsync(
+							keyName
+								.split(".")
+								.slice(2)
+								.join(".")
+						);
+					}
+					
+					resolve();
+				});
+				promiseArray.push(promise);
 			});
-
-			resolve();
+			Promise.all(promiseArray).then(() => {
+				resolve();
+			});
+			
 		});
 	}
 	checkStatus(ags) {

@@ -1,10 +1,10 @@
 {
   "common": {
     "name": "nina",
-    "version": "0.0.20",
+    "version": "0.0.21",
     "news": {
-      "0.0.20": {
-        "de": "Bugfixing."
+      "0.0.21": {
+        "de": "Adapter neugeschrieben damit Objekte im ioBroker sich nur noch ändern wenn eine Änderung vorhanden ist."
       },
       "0.0.19": {
         "de": "Auslastung reduziert. Objekte werden nur geändert wenn die Warnungen sich ändern."
