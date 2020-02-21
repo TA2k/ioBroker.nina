@@ -169,6 +169,7 @@ class Nina extends utils.Adapter {
 			this.promiseArray.push(promise);
 		});
 		Promise.all(this.promiseArray).then(() => {
+		    this.setState("info.connection", true, true);
 			this.setGefahren();
 		});
 	}
