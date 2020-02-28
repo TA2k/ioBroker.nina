@@ -254,7 +254,7 @@ class Nina extends utils.Adapter {
                 						}
 
                 						this.log.debug(body);
-                						if (this.config.filterText && body.indexOf(this.config.filterText) !== -1 ) {
+                						if (this.config.filterText && body.indexOf(this.config.filterText) === -1 ) {
                 							resolve();
                 							return;
                 						}
