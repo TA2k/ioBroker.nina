@@ -180,6 +180,12 @@ class Nina extends utils.Adapter {
 			const refArray = [];
 			this.status[areaCode] &&
                 Object.keys(this.status[areaCode].buckets).forEach(bucket => {
+                	if (this.config.ignoreDwd && bucket ==="bbk.dwd") {
+                		return;
+                	}
+                	if (this.config.ignoreLhp && bucket ==="bbk.lhp") {
+                		return;
+                	}
                 	this.status[areaCode].buckets[bucket].forEach(ref => {
                 		refArray.push(ref);
                 		const requestPromise = new Promise((resolve, reject) => {
