@@ -254,6 +254,10 @@ class Nina extends utils.Adapter {
                 						}
 
                 						this.log.debug(body);
+                						if (this.config.filterText && body.indexOf(this.config.filterText) !== -1 ) {
+                							resolve();
+                							return;
+                						}
                 						const gefahr = JSON.parse(body);
                 						this.setState("info.connection", true, true);
                 						if ( index === -1) {
