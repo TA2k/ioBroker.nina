@@ -180,13 +180,16 @@ class Nina extends utils.Adapter {
 			const refArray = [];
 			this.status[areaCode] &&
                 Object.keys(this.status[areaCode].buckets).forEach(bucket => {
-                	if (this.config.ignoreDwd && bucket ==="bbk.dwd") {
-                		return;
-                	}
-                	if (this.config.ignoreLhp && bucket ==="bbk.lhp") {
-                		return;
-                	}
+
                 	this.status[areaCode].buckets[bucket].forEach(ref => {
+                		if (this.config.ignoreDwd && bucket ==="bbk.dwd") {
+                			this.status[areaCode].numberOfWarn = parseInt(this.status[areaCode].numberOfWarn) - 1;
+                			return;
+                		}
+                		if (this.config.ignoreLhp && bucket ==="bbk.lhp") {
+                			this.status[areaCode].numberOfWarn = parseInt(this.status[areaCode].numberOfWarn) - 1;
+                			return;
+                		}
                 		refArray.push(ref);
                 		const requestPromise = new Promise((resolve, reject) => {
                 			const headers = {};
@@ -255,6 +258,7 @@ class Nina extends utils.Adapter {
 
                 						this.log.debug(body);
                 						if (this.config.filterText && body.indexOf(this.config.filterText) === -1 ) {
+                							this.status[areaCode].numberOfWarn = parseInt(this.status[areaCode].numberOfWarn) - 1;
                 							resolve();
                 							return;
                 						}
