@@ -449,9 +449,9 @@ class Nina extends utils.Adapter {
 								return;
 							}
 							if (modPath[modPath.length -1] === "description" && this.parent.node.headline) {
-								const headline = this.parent.node.headline && this.parent.node.headline.replace(/<br\/>/g, " ");
+								const headline = this.parent.node.headline && this.parent.node.headline.replace(/<br\/>/g, " ") + "\n" ;
 								const instructions = this.parent.node.instructions &&  "\n" + this.parent.node.instruction.replace(/<br\/>/g, " ");
-								const description = value &&  "\n" + value.replace(/<br\/>/g, " ");
+								const description = value &&  + value.replace(/<br\/>/g, " ");
 								const fullText = headline + description + instructions;
 								adapter.setObjectNotExists(areaCode + ".warnung" + stringIndex + "." + modPath.slice(0,-1).join(".") +".fullText", {
 									type: "state",
