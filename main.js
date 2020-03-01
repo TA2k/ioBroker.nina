@@ -264,6 +264,7 @@ class Nina extends utils.Adapter {
                 						}
                 						const gefahr = JSON.parse(body);
                 						this.setState("info.connection", true, true);
+										
                 						if ( index === -1) {
                 							this.currentGefahren[areaCode].push(gefahr);
                 						} else {
@@ -446,6 +447,24 @@ class Nina extends utils.Adapter {
 							});
 							if (!adapter.config.showArea && modPath.join(".").indexOf(".area") !== -1) {
 								return;
+							}
+							if (modPath[modPath.length -1] === "description" && this.parent.node.headline) {
+								const headline = this.parent.node.headline && this.parent.node.headline.replace(/<br\/>/g, " ");
+								const instructions = this.parent.node.instructions &&  "\n" + this.parent.node.instruction.replace(/<br\/>/g, " ");
+								const description = value &&  "\n" + value.replace(/<br\/>/g, " ");
+								const fullText = headline + description + instructions;
+								adapter.setObjectNotExists(areaCode + ".warnung" + stringIndex + "." + modPath.slice(0,-1).join(".") +".fullText", {
+									type: "state",
+									common: {
+										name: "Voller Text headline + description + instruction",
+										role: "indicator",
+										type: typeof value,
+										write: false,
+										read: true
+									},
+									native: {}
+								});
+								adapter.setState(areaCode + ".warnung" + stringIndex + "." +  modPath.slice(0,-1).join(".") +".fullText", fullText, true);
 							}
 							adapter.setObjectNotExists(areaCode + ".warnung" + stringIndex + "." + modPath.join("."), {
 								type: "state",
