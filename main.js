@@ -480,6 +480,22 @@ class Nina extends utils.Adapter {
 							adapter.setState(areaCode + ".warnung" + stringIndex + "." + modPath.join("."), value, true);
 						}
 					});
+					if (this.config.rawJson) {
+                        const value = JSON.stringify(element);
+                        adapter.setObjectNotExists(areaCode + ".warnung" + stringIndex + ".rawJson", {
+                            type: "state",
+                            common: {
+                                name: "Json der Warnung",
+                                role: "indicator",
+                                type: typeof value,
+                                write: false,
+                                read: true
+                            },
+                            native: {}
+                        });
+                        adapter.setState(areaCode + ".warnung" + stringIndex + ".rawJson", value, true);
+                    }
+
 				});
 			});
 			resolve();
