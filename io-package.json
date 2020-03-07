@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "nina",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "news": {
+      "0.0.22": {
+        "de": "Optionen zum Filtern und JSON Ausgabe hinzugefügt."
+      },
       "0.0.21": {
         "de": "Adapter neugeschrieben damit Objekte im ioBroker sich nur noch ändern wenn eine Änderung vorhanden ist."
       },
