@@ -256,12 +256,21 @@ class Nina extends utils.Adapter {
                 							}
                 						}
 
-                						this.log.debug(body);
-                						if (this.config.filterText && body.indexOf(this.config.filterText) === -1 ) {
-                							this.status[areaCode].numberOfWarn = parseInt(this.status[areaCode].numberOfWarn) - 1;
-                							resolve();
-                							return;
-                						}
+										this.log.debug(body);
+										if (this.config.filterText) {
+											const filterArray = this.config.filterText.replace(/ /g, "").split(",");
+											let found = false;
+											filterArray.forEach(element => {
+												if (body.indexOf(element) !== -1) {
+													found = true;
+												}
+											});
+											if (!found) {
+												this.status[areaCode].numberOfWarn = parseInt(this.status[areaCode].numberOfWarn) - 1;
+												resolve();
+												return;
+											}
+										}
                 						const gefahr = JSON.parse(body);
                 						this.setState("info.connection", true, true);
 										
