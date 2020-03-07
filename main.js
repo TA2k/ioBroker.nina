@@ -205,7 +205,7 @@ class Nina extends utils.Adapter {
                 					gzip: true
                 				},
                 				async (err, resp, body) => {
-                					if (err || (resp && resp.statusCode >= 400)) {
+                					if (err || (resp && resp.statusCode >= 400) || !body) {
                 						if (err && err.code === "EPROTO") {
                 							this.log.warn(
                 								"You using a maybe modern TLS (debian Buster) which is not support by the NINA server. Please adjust in your /etc/ssl/openssl.cnf to CipherString = DEFAULT@SECLEVEL=1"
@@ -366,7 +366,7 @@ class Nina extends utils.Adapter {
 					gzip: true
 				},
 				(err, resp, body) => {
-					if (err || (resp && resp.statusCode >= 400)) {
+					if (err || (resp && resp.statusCode >= 400) || !body) {
 						if (err && err.code === "EPROTO") {
 							this.log.warn(
 								"You using a maybe modern TLS (debian Buster) which is not support by the NINA server. Please adjust in your /etc/ssl/openssl.cnf to CipherString = DEFAULT@SECLEVEL=1"
