@@ -113,7 +113,7 @@
     "type": "misc-data",
     "compact": true,
     "connectionType": "cloud",
-    "dataSource": "push",
+    "dataSource": "poll",
     "materialize": true,
     "dependencies": [
       {
