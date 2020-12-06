@@ -112,6 +112,8 @@
     "mode": "daemon",
     "type": "misc-data",
     "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "push",
     "materialize": true,
     "dependencies": [
       {
