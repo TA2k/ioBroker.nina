@@ -123,7 +123,11 @@
   },
   "native": {
     "interval": 5,
-    "rsArray": "",
+    "agsArray": "",
+    "filterText": "",
+    "rawJson": false,
+    "ignoreLhp": false,
+    "ignoreDwd": false,
     "example": false,
     "showArea": false
   },
