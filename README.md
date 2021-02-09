@@ -15,7 +15,7 @@
 
 Notfall-Informations- und Nachrichten-App
 
-<https://www.bbk.bund.de/DE/NINA/Warn-App_NINA.html>
+<https://www.bbk.bund.de/DE/NINA/Warn-App_NINA_node.html>
 
 <https://warnung.bund.de/>
 
@@ -44,6 +44,10 @@ MinProtocol = TLSv1.2
 CipherString = DEFAULT@SECLEVEL=1
 
 ## Changelog
+
+### 0.0.24
+- (thost96) fixed broken link in README
+- (thost96) added icon with transparent background for admin ui
 
 ### 0.0.23
 
