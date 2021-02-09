@@ -48,6 +48,7 @@ CipherString = DEFAULT@SECLEVEL=1
 ### 0.0.24
 - (thost96) fixed broken link in README
 - (thost96) added icon with transparent background for admin ui
+- (thost96) updated link on admin ui to the same as on this README as old link was broken
 
 ### 0.0.23
 
