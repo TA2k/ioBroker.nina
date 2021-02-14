@@ -8,6 +8,7 @@ const utils = require("@iobroker/adapter-core");
 const request = require("request");
 const traverse = require("traverse");
 
+const agsNames = require("./ags");
 class Nina extends utils.Adapter {
     /**
      * @param {Partial<ioBroker.AdapterOptions>} [options={}]
@@ -30,6 +31,11 @@ class Nina extends utils.Adapter {
         this.agsArray = [];
         if (this.config.agsArray) {
             this.agsArray = this.config.agsArray.replace(/ /g, "").split(",");
+            this.agsArray.forEach((ags, index) => {
+                if (ags.length > 5) {
+                    this.agsArray[index] = ags.slice(0, 5);
+                }
+            });
         }
         if (this.config.example) {
             this.agsArray.push("Beispielwarnung");
@@ -46,84 +52,68 @@ class Nina extends utils.Adapter {
             }
         });
 
-        request.get(
-            {
-                url: "https://warnung.bund.de/assets/json/suche_channel.json",
-                followAllRedirects: true,
-                gzip: true,
-            },
-            (err, resp, body) => {
-                let channels = {};
-                try {
-                    channels = JSON.parse(body.replace(/\r/g, "").replace(/\n/g, ""));
-                } catch (e) {
-                    //Error means only device will create without city name
-                    this.log.debug(JSON.stringify(e));
-                }
-                this.agsArray.forEach(async (element) => {
-                    let name = "";
-                    if (channels[element]) {
-                        name = channels[element].NAME;
-                        this.log.info("Found AGS for: " + name);
-                    }
-                    await this.setObjectNotExistsAsync(element, {
-                        type: "device",
-                        common: {
-                            name: name,
-                            role: "indicator",
-                            type: "mixed",
-                            write: false,
-                            read: true,
-                        },
-                        native: {},
-                    });
-                    await this.setObjectNotExistsAsync(element + ".numberOfWarn", {
-                        type: "state",
-                        common: {
-                            name: "Anzahl der aktuellen Warnungen",
-                            role: "indicator",
-                            type: "number",
-                            write: false,
-                            read: true,
-                        },
-                        native: {},
-                    });
-                    await this.setObjectNotExistsAsync(element + ".activeWarn", {
-                        type: "state",
-                        common: {
-                            name: "Anzahl der aktiven Warnungen",
-                            role: "indicator",
-                            type: "number",
-                            write: false,
-                            read: true,
-                        },
-                        native: {},
-                    });
-                    await this.setObjectNotExistsAsync(element + ".cancelWarn", {
-                        type: "state",
-                        common: {
-                            name: "Anzahl der canceled Warnungen",
-                            role: "indicator",
-                            type: "number",
-                            write: false,
-                            read: true,
-                        },
-                        native: {},
-                    });
-                    await this.setObjectNotExistsAsync(element + ".identifierList", {
-                        type: "state",
-                        common: {
-                            name: "Liste der Warnungenidentifier",
-                            role: "state",
-                            type: "array",
-                            write: false,
-                            read: true,
-                        },
-                        native: {},
-                    });
-                });
+        this.agsArray.forEach(async (element) => {
+            let name = "";
+            if (agsNames[element]) {
+                name = agsNames[element].NAME;
+                this.log.info("Found AGS for: " + name);
             }
-        );
+            await this.setObjectNotExistsAsync(element, {
+                type: "device",
+                common: {
+                    name: name,
+                    role: "indicator",
+                    type: "mixed",
+                    write: false,
+                    read: true,
+                },
+                native: {},
+            });
+            await this.setObjectNotExistsAsync(element + ".numberOfWarn", {
+                type: "state",
+                common: {
+                    name: "Anzahl der aktuellen Warnungen",
+                    role: "indicator",
+                    type: "number",
+                    write: false,
+                    read: true,
+                },
+                native: {},
+            });
+            await this.setObjectNotExistsAsync(element + ".activeWarn", {
+                type: "state",
+                common: {
+                    name: "Anzahl der aktiven Warnungen",
+                    role: "indicator",
+                    type: "number",
+                    write: false,
+                    read: true,
+                },
+                native: {},
+            });
+            await this.setObjectNotExistsAsync(element + ".cancelWarn", {
+                type: "state",
+                common: {
+                    name: "Anzahl der canceled Warnungen",
+                    role: "indicator",
+                    type: "number",
+                    write: false,
+                    read: true,
+                },
+                native: {},
+            });
+            await this.setObjectNotExistsAsync(element + ".identifierList", {
+                type: "state",
+                common: {
+                    name: "Liste der Warnungenidentifier",
+                    role: "state",
+                    type: "array",
+                    write: false,
+                    read: true,
+                },
+                native: {},
+            });
+        });
 
         this.interval = setInterval(() => {
             this.promiseArray = [];
