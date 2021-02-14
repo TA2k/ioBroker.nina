@@ -128,10 +128,10 @@ class Nina extends utils.Adapter {
         this.interval = setInterval(() => {
             this.promiseArray = [];
             this.agsArray.forEach(async (element) => {
-                const promise = new Promise(async (resolve, reject) => {
+                const promise = new Promise(async (resolve) => {
                     await this.checkStatus(element)
                         .then(async () => {
-                            await this.resetWarnings(element);
+                            await this.resetWarnings(element, undefined, true);
                         })
                         .catch(() => {});
                     await this.getWarnungen(element)
@@ -141,10 +141,14 @@ class Nina extends utils.Adapter {
                 });
                 this.promiseArray.push(promise);
             });
-            Promise.all(this.promiseArray).then(() => {
-                this.setState("info.connection", true, true);
-                this.setGefahren();
-            });
+            Promise.all(this.promiseArray)
+                .then(() => {
+                    this.setState("info.connection", true, true);
+                    this.setGefahren();
+                })
+                .catch((error) => {
+                    this.log.error(error);
+                });
         }, this.config.interval * 1000 * 60);
 
         //create empty current GefahrenObject to have correct numberofWarn
@@ -154,7 +158,7 @@ class Nina extends utils.Adapter {
         this.promiseArray = [];
 
         this.agsArray.forEach(async (element) => {
-            const promise = new Promise(async (resolve, reject) => {
+            const promise = new Promise(async (resolve) => {
                 this.currentGefahren[element] = [];
                 await this.checkStatus(element).catch(() => {});
                 await this.getWarnungen(element).catch(() => {});
@@ -162,10 +166,14 @@ class Nina extends utils.Adapter {
             });
             this.promiseArray.push(promise);
         });
-        Promise.all(this.promiseArray).then(() => {
-            this.setState("info.connection", true, true);
-            this.setGefahren();
-        });
+        Promise.all(this.promiseArray)
+            .then(() => {
+                this.setState("info.connection", true, true);
+                this.setGefahren();
+            })
+            .catch((error) => {
+                this.log.error(error);
+            });
     }
 
     getWarnungen(areaCode) {
@@ -184,7 +192,7 @@ class Nina extends utils.Adapter {
                             return;
                         }
                         refArray.push(ref);
-                        const requestPromise = new Promise((resolve, reject) => {
+                        const requestPromise = new Promise((resolve) => {
                             const headers = {};
                             const url = "https://warnung.bund.de/" + bucket + "/" + ref + ".ohne.json";
                             if (this.etags[areaCode + url]) {
@@ -306,8 +314,8 @@ class Nina extends utils.Adapter {
                 });
         });
     }
-    async resetWarnings(areaCode, index) {
-        return new Promise(async (resolve, reject) => {
+    async resetWarnings(areaCode, index, softDelete) {
+        return new Promise(async (resolve) => {
             let searchText = ".warnung";
             if (areaCode && index === undefined) {
                 this.currentGefahren[areaCode] = [];
@@ -326,21 +334,47 @@ class Nina extends utils.Adapter {
             }
             const pre = this.name + "." + this.instance;
             const states = await this.getStatesAsync(pre + ".*");
+            const excludeWarnings = [];
+            if (softDelete) {
+                const numberOfWarn = (await this.getStateAsync(areaCode + ".numberOfWarn")) || { val: 0 };
+                for (let i = 1; i <= numberOfWarn.val; i++) {
+                    let stringI = i.toString();
+                    if (i < 10) {
+                        stringI = "0" + stringI;
+                    }
+                    const warnId = (await this.getStateAsync(areaCode + ".warnung" + stringI + ".identifier")) || { val: 0 };
+                    if (this.status[areaCode].identifierList.includes(warnId.val)) {
+                        excludeWarnings.push(areaCode + ".warnung" + stringI);
+                    }
+                }
+            }
             const allIds = Object.keys(states);
             const promiseArray = [];
             allIds.forEach(async (keyName) => {
-                const promise = new Promise(async (resolve, reject) => {
+                const promise = new Promise(async (resolve) => {
                     if (keyName.indexOf(searchText) !== -1) {
-                        await this.delObjectAsync(keyName.split(".").slice(2).join("."));
+                        let excluded = false;
+                        excludeWarnings.forEach((excludeText) => {
+                            if (keyName.indexOf(excludeText) !== -1) {
+                                excluded = true;
+                            }
+                        });
+                        if (!excluded) {
+                            await this.delObjectAsync(keyName.split(".").slice(2).join("."));
+                        }
                     }
 
                     resolve();
                 });
                 promiseArray.push(promise);
             });
-            Promise.all(promiseArray).then(() => {
-                resolve();
-            });
+            Promise.all(promiseArray)
+                .then(() => {
+                    resolve();
+                })
+                .catch((error) => {
+                    this.log.error(error);
+                });
         });
     }
     checkStatus(ags) {
@@ -426,7 +460,7 @@ class Nina extends utils.Adapter {
         });
     }
     setGefahren() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const adapter = this;
             Object.keys(this.status).forEach((areaCode) => {
                 this.setState(areaCode + ".numberOfWarn", this.status[areaCode].numberOfWarn, true);
@@ -461,47 +495,65 @@ class Nina extends utils.Adapter {
                                 const instructions = this.parent.node.instructions && "\n" + this.parent.node.instruction.replace(/<br\/>/g, " ");
                                 const description = value && +value.replace(/<br\/>/g, " ");
                                 const fullText = headline + description + instructions;
-                                adapter.setObjectNotExists(areaCode + ".warnung" + stringIndex + "." + modPath.slice(0, -1).join(".") + ".fullText", {
+                                adapter
+                                    .setObjectNotExistsAsync(areaCode + ".warnung" + stringIndex + "." + modPath.slice(0, -1).join(".") + ".fullText", {
+                                        type: "state",
+                                        common: {
+                                            name: "Voller Text headline + description + instruction",
+                                            role: "indicator",
+                                            type: typeof value,
+                                            write: false,
+                                            read: true,
+                                        },
+                                        native: {},
+                                    })
+                                    .then(() => {
+                                        adapter.setState(areaCode + ".warnung" + stringIndex + "." + modPath.slice(0, -1).join(".") + ".fullText", fullText, true);
+                                    })
+                                    .catch((error) => {
+                                        adapter.log.error(error);
+                                    });
+                            }
+                            adapter
+                                .setObjectNotExistsAsync(areaCode + ".warnung" + stringIndex + "." + modPath.join("."), {
                                     type: "state",
                                     common: {
-                                        name: "Voller Text headline + description + instruction",
+                                        name: this.key,
                                         role: "indicator",
                                         type: typeof value,
                                         write: false,
                                         read: true,
                                     },
                                     native: {},
+                                })
+                                .then(() => {
+                                    adapter.setState(areaCode + ".warnung" + stringIndex + "." + modPath.join("."), value, true);
+                                })
+                                .catch((error) => {
+                                    adapter.log.error(error);
                                 });
-                                adapter.setState(areaCode + ".warnung" + stringIndex + "." + modPath.slice(0, -1).join(".") + ".fullText", fullText, true);
-                            }
-                            adapter.setObjectNotExists(areaCode + ".warnung" + stringIndex + "." + modPath.join("."), {
+                        }
+                    });
+                    if (this.config.rawJson) {
+                        const value = JSON.stringify(element);
+                        adapter
+                            .setObjectNotExistsAsync(areaCode + ".warnung" + stringIndex + ".rawJson", {
                                 type: "state",
                                 common: {
-                                    name: this.key,
+                                    name: "Json der Warnung",
                                     role: "indicator",
                                     type: typeof value,
                                     write: false,
                                     read: true,
                                 },
                                 native: {},
+                            })
+                            .then(() => {
+                                adapter.setState(areaCode + ".warnung" + stringIndex + ".rawJson", value, true);
+                            })
+                            .catch((error) => {
+                                adapter.log.error(error);
                             });
-                            adapter.setState(areaCode + ".warnung" + stringIndex + "." + modPath.join("."), value, true);
-                        }
-                    });
-                    if (this.config.rawJson) {
-                        const value = JSON.stringify(element);
-                        adapter.setObjectNotExists(areaCode + ".warnung" + stringIndex + ".rawJson", {
-                            type: "state",
-                            common: {
-                                name: "Json der Warnung",
-                                role: "indicator",
-                                type: typeof value,
-                                write: false,
-                                read: true,
-                            },
-                            native: {},
-                        });
-                        adapter.setState(areaCode + ".warnung" + stringIndex + ".rawJson", value, true);
                     }
                 });
             });
