@@ -3,10 +3,17 @@ updates:
 - package-ecosystem: npm
   directory: "/"
   schedule:
-    interval: monthly
-    time: "04:00"
-    timezone: Europe/Berlin
-  open-pull-requests-limit: 20
-  assignees:
-  - TA2k
-  versioning-strategy: increase
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@types/node"
+    versions:
+    - 15.0.0
+  - dependency-name: sinon
+    versions:
+    - 10.0.0
+    - 9.2.4
+  - dependency-name: "@types/mocha"
+    versions:
+    - 8.2.0
+    - 8.2.1
