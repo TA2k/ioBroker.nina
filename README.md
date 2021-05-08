@@ -45,6 +45,9 @@ CipherString = DEFAULT@SECLEVEL=1
 
 ## Changelog
 
+### 0.0.25
+- (thost96) fixes for issues found by adapter-checker (issue #70)
+
 ### 0.0.24
 - (thost96) fixed broken link in README
 - (thost96) added icon with transparent background for admin ui
@@ -106,7 +109,7 @@ CipherString = DEFAULT@SECLEVEL=1
 
 MIT License
 
-Copyright (c) 2020 tomboxi <tombox_2020@gmail.com>
+Copyright (c) 2019-2021 tomboxi <tombox_2020@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
