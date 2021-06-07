@@ -456,7 +456,7 @@ class Nina extends utils.Adapter {
                 this.setState(areaCode + ".numberOfWarn", this.status[areaCode].numberOfWarn, true);
                 this.setState(areaCode + ".activeWarn", this.status[areaCode].activeWarn, true);
                 this.setState(areaCode + ".cancelWarn", this.status[areaCode].cancelWarn, true);
-                this.setState(areaCode + ".identifierList", { val: this.status[areaCode].identifierList, ack: true });
+                this.setState(areaCode + ".identifierList", { val: JSON.stringify(this.status[areaCode].identifierList), ack: true });
             });
             Object.keys(this.currentGefahren).forEach((areaCode) => {
                 this.currentGefahren[areaCode].forEach((element, index) => {

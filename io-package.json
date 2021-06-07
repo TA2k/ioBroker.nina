@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "nina",
-    "version": "0.0.24",
+    "version": "0.0.25",
     "news": {
-      "0.0.24": {
+      "0.0.25": {
         "de": "- fix js-controller warnings \n- minimized self expanding object tree \n - Accept long AGS Numbers \n- (thost96) fixed broken link in README \n - (thost96) added icon with transparent background for admin ui \n - (thost96) updated link on admin ui to the same as on this README as old link was broken"
       },
       "0.0.23": {
