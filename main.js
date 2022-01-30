@@ -24,11 +24,12 @@ class Nina extends utils.Adapter {
         this.status = {};
         this.etags = {};
         this.lastMods = {};
+        this.agsArray = [];
+        this.promiseArray = [];
     }
     async onReady() {
         this.setState("info.connection", false, true);
 
-        this.agsArray = [];
         if (this.config.agsArray) {
             this.agsArray = this.config.agsArray.replace(/ /g, "").split(",");
             this.agsArray.forEach((ags, index) => {
