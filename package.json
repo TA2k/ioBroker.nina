@@ -16,7 +16,7 @@
   "description": "Notfall-Informations- und Nachrichten-App",
   "devDependencies": {
     "@iobroker/testing": "^2.4.2",
-    "@types/chai": "^4.2.14",
+    "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.2",
     "@types/gulp": "^4.0.8",
     "@types/mocha": "^5.2.7",
