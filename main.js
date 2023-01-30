@@ -25,6 +25,7 @@ class Nina extends utils.Adapter {
         this.etags = {};
         this.lastMods = {};
         this.agsArray = [];
+        this.ignoreIdentifierList = [];
         this.promiseArray = [];
     }
     async onReady() {
@@ -98,6 +99,17 @@ class Nina extends utils.Adapter {
                     name: "Anzahl der canceled Warnungen",
                     role: "indicator",
                     type: "number",
+                    write: false,
+                    read: true,
+                },
+                native: {},
+            });
+            await this.setObjectNotExistsAsync(element + ".ignoreIdentifierList", {
+                type: "state",
+                common: {
+                    name: "Liste der Ignorierten Warnungenidentifier",
+                    role: "state",
+                    type: "array",
                     write: false,
                     read: true,
                 },
@@ -273,7 +285,6 @@ class Nina extends utils.Adapter {
                                                 return;
                                             }
                                         }
-                                        
                                         if (this.config.ignoreFilterText) {
                                             const filterArray = this.config.ignoreFilterText.replace(/ /g, "").split(",");
                                             let found = false;
@@ -281,15 +292,16 @@ class Nina extends utils.Adapter {
                                                 const gefunden = body.indexOf(element);
                                                 if (gefunden > 1) {
                                                     found = true;
+                                                    this.ignoreIdentifierList.push(element);
                                                 }
                                             });
                                             if (found) {
                                                 this.status[areaCode].numberOfWarn = parseInt(this.status[areaCode].numberOfWarn) - 1;
+                                                this.setState(areaCode + ".ignoreIdentifierList", { val: JSON.stringify(this.ignoreIdentifierList), ack: true });
                                                 resolve();
                                                 return;
                                             }
                                         }
-                                                                                                                       
                                         const gefahr = JSON.parse(body);
                                         this.setState("info.connection", true, true);
 
@@ -448,6 +460,7 @@ class Nina extends utils.Adapter {
                         this.status[ags].activeWarn = 0;
                         this.status[ags].cancelWarn = 0;
                         this.status[ags].identifierList = [];
+                        this.status[ags].ignoreIdentifierList = [];
                         this.status[ags].buckets = {};
                         const status = JSON.parse(body);
                         status.forEach((bucket) => {
