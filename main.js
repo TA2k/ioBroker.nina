@@ -273,6 +273,23 @@ class Nina extends utils.Adapter {
                                                 return;
                                             }
                                         }
+                                        
+                                        if (this.config.ignoreFilterText) {
+                                            const filterArray = this.config.ignoreFilterText.replace(/ /g, "").split(",");
+                                            let found = false;
+                                            filterArray.forEach((element) => {
+                                                const gefunden = body.indexOf(element);
+                                                if (gefunden > 1) {
+                                                    found = true;
+                                                }
+                                            });
+                                            if (found) {
+                                                this.status[areaCode].numberOfWarn = parseInt(this.status[areaCode].numberOfWarn) - 1;
+                                                resolve();
+                                                return;
+                                            }
+                                        }
+                                                                                                                       
                                         const gefahr = JSON.parse(body);
                                         this.setState("info.connection", true, true);
 
