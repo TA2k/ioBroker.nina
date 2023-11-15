@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nina",
-    "version": "0.0.25",
+    "version": "0.0.26",
     "news": {
+      "0.0.26": {
+        "en": "Fix active warnings state",
+        "de": "Fix für active warnings Status"
+      },
       "0.0.25": {
         "de": "- fix js-controller warnings \n- minimized self expanding object tree \n - Accept long AGS Numbers \n- (thost96) fixed broken link in README \n - (thost96) added icon with transparent background for admin ui \n - (thost96) updated link on admin ui to the same as on this README as old link was broken"
       },
@@ -95,15 +99,8 @@
       "pl": "Notfall-Informations- und Nachrichten-App",
       "zh-cn": "Notfall-Informations- und Nachrichten-App"
     },
-    "authors": [
-      "tomboxi <tombox_2020@gmail.com>"
-    ],
-    "keywords": [
-      "NINA",
-      "Gefahrenwarnung",
-      "Warnung",
-      "KATWARN"
-    ],
+    "authors": ["tomboxi <tombox_2020@gmail.com>"],
+    "keywords": ["NINA", "Gefahrenwarnung", "Warnung", "KATWARN"],
     "license": "MIT",
     "platform": "Javascript/Node.js",
     "main": "main.js",

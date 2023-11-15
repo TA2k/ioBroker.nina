@@ -1,6 +1,6 @@
 {
   "author": {
-    "name": "tomboxi",
+    "name": "TA2k",
     "email": "tombox_2020@gmail.com"
   },
   "bugs": {
@@ -33,7 +33,7 @@
     "sinon-chai": "^3.7.0"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=16.0.0"
   },
   "homepage": "https://github.com/TA2k/ioBroker.nina",
   "keywords": [
@@ -57,5 +57,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "0.0.25"
+  "version": "0.0.26"
 }
