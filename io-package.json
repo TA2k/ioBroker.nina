@@ -101,7 +101,10 @@
     },
     "authors": ["tomboxi <tombox_2020@gmail.com>"],
     "keywords": ["NINA", "Gefahrenwarnung", "Warnung", "KATWARN"],
-    "license": "MIT",
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
     "platform": "Javascript/Node.js",
     "main": "main.js",
     "icon": "nina.png",
