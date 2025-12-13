@@ -118,7 +118,7 @@ CipherString = DEFAULT@SECLEVEL=1
 
 MIT License
 
-Copyright (c) 2019-2021 tomboxi <tombox_2020@gmail.com>
+Copyright (c) 2019-2025 tomboxi <tombox_2020@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
