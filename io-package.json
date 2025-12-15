@@ -103,7 +103,6 @@
     "keywords": ["NINA", "Gefahrenwarnung", "Warnung", "KATWARN"],
     "license": "MIT",
     "platform": "Javascript/Node.js",
-    "main": "main.js",
     "icon": "nina.png",
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.nina/master/admin/nina.png",
