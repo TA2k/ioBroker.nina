@@ -15,7 +15,7 @@
   "deprecated": false,
   "description": "Notfall-Informations- und Nachrichten-App",
   "devDependencies": {
-    "@iobroker/testing": "^4.1.0",
+    "@iobroker/testing": "^5.2.2",
     "@types/chai": "^4.3.10",
     "@types/chai-as-promised": "^7.1.8",
     "@types/mocha": "^10.0.4",
