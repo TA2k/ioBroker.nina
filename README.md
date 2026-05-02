@@ -45,6 +45,9 @@ CipherString = DEFAULT@SECLEVEL=1
 
 ## Changelog
 
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22 now
+
 ### 0.0.26
 
 - fix for active warnings
