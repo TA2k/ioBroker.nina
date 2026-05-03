@@ -114,6 +114,8 @@ CipherString = DEFAULT@SECLEVEL=1
 
 - (tomboxi) initial release
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 
 MIT License
