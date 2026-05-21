@@ -45,6 +45,10 @@ CipherString = DEFAULT@SECLEVEL=1
 
 ## Changelog
 
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+
 ### 0.0.26
 
 - fix for active warnings
