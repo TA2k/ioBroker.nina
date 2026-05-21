@@ -99,8 +99,15 @@
       "pl": "Notfall-Informations- und Nachrichten-App",
       "zh-cn": "Notfall-Informations- und Nachrichten-App"
     },
-    "authors": ["tomboxi <tombox_2020@gmail.com>"],
-    "keywords": ["NINA", "Gefahrenwarnung", "Warnung", "KATWARN"],
+    "authors": [
+      "tomboxi <tombox_2020@gmail.com>"
+    ],
+    "keywords": [
+      "NINA",
+      "Gefahrenwarnung",
+      "Warnung",
+      "KATWARN"
+    ],
     "license": "MIT",
     "platform": "Javascript/Node.js",
     "main": "main.js",
@@ -117,7 +124,7 @@
     "materialize": true,
     "dependencies": [
       {
-        "js-controller": ">=1.4.2"
+        "js-controller": ">=6.0.11"
       }
     ]
   },
