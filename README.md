@@ -45,6 +45,9 @@ CipherString = DEFAULT@SECLEVEL=1
 
 ## Changelog
 
+### **WORK IN PROGRESS**
+- (iobroker-bot) Adapter requires node.js >= 22 now.
+
 ### 0.0.26
 
 - fix for active warnings
